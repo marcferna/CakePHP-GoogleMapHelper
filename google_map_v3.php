@@ -3,7 +3,7 @@
   	CakePHP Google Map V3 - Helper to CakePHP framework that integrates a Google Map in your view
   	using Google Maps API V3.
   
-	Copyright (c) 2010 Marc Fernandez Girones: info@marcfg.com
+	Copyright (c) 2012 Marc Fernandez Girones: info@marcfg.com
 
 	MIT LICENSE:
 	Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,7 +27,7 @@
 	MarcFG : http://www.marcfg.com
 	 
 	@author      Marc Fernandez Girones <info@marcfg.com>
-	@version     1.0
+	@version     2.0
 	@license     OPPL
 	 
 	Date	     May 13, 2010
@@ -35,32 +35,42 @@
     USAGE:
     
     In your CONTROLLER:
-    	var $helpers = array('GoogleMapV3');	Add the helper
+    	var $helpers = array('GoogleMapV3'); 	//Add the helper
 
   	In your VIEW:
-  		To add a map that localizes you:
-  			echo $googleMapV3->map(); 
+  		First we add the Google Maps API (Note that Google Maps API V3 does NOT require a API Key):
+  		
+  			<?php echo $this->Html->script('http://maps.google.com/maps/api/js?sensor=true',false); ?>
+			<?php echo $this->Html->script('http://code.google.com/apis/gears/gears_init.js',false); ?>
+			
+  		Then we can add a map:
+  
+  			<?php echo $this->GoogleMapV3->map(); ?>
   		
   		OR
   		
   		You can also pass to the function a variable with any of the followings options and change the default parameters
 	  		$mapOptions= array(
+				'id'='map_canvas',				//Map canvas ID
 				'width'=>'800px',				//Width of the map
 				'height'=>'800px',				//Height of the map
+				'style' =>'',					//CSS style for the map canvas
 				'zoom'=>7,						//Zoom
 				'type'=>'HYBRID', 				//Type of map (ROADMAP, SATELLITE, HYBRID or TERRAIN)
-				'latitude'=>40.69847032728747,	//Default latitude if the browser doesn't support localization or you don't want localization
-				'longitude'=>-1.9514422416687,	//Default longitude if the browser doesn't support localization or you don't want localization
+				'custom'=>null,					//Any other map option not mentioned before and available for the map. For example 'mapTypeControl: true' (http://code.google.com/apis/maps/documentation/javascript/controls.html)
+				'latitude'=>40.69847032728747,	//Default latitude if the browser doesn't support localization or you don't want localization (Latitude & Langitude have priority versus Address)
+				'longitude'=>-1.9514422416687,	//Default longitude if the browser doesn't support localization or you don't want localization (Latitude & Langitude have priority versus Address)
+				'address="1 Infinite Loop, Cupertino"; //Default address if the browser doesn't support localization or you don't want localization (Latitude & Langitude have priority versus Address)
 				'localize'=>true,				//Boolean to localize your position or not
 				'marker'=>true,					//Boolean to put a marker in the position or not
 				'markerIcon'=>'http://google-maps-icons.googlecode.com/files/home.png',	//Default icon of the marker
 				'infoWindow'=>true,				//Boolean to show an information window when you click the marker or not
 				'windowText'=>'My Position'		//Default text inside the information window
 			);
-			echo $googleMapV3->map($mapOptions); To add a map that localizes you
+			echo $this->GoogleMapV3->map($mapOptions); To add a map that localizes you
 		
 		To add a marker:
-  			echo $googleMapV3->addMarker(array('latitude'=>40.69847,'longitude'=>-73.9514));
+  			echo $this->GoogleMapV3->addMarker(array('latitude'=>40.69847,'longitude'=>-73.9514));
   			
   		OR
   		
@@ -82,10 +92,13 @@ class GoogleMapV3Helper extends Helper {
 
 	
 	//DEFAULT MAP OPTIONS (function map())
+	var $defaultId="map_canvas";				//Map canvas ID
 	var $defaultWidth="800px";					//Width of the map
 	var $defaultHeight="800px";					//Height of the map
+	var $defaultStyle ="";						//CSS style for the map canvas
 	var $defaultZoom=6;							//Default zoom
 	var $defaultType='HYBRID';					//Type of map (ROADMAP, SATELLITE, HYBRID or TERRAIN)
+	var $defaultCustom = "";					//Any other map option not mentioned before and available for the map. For example 'mapTypeControl: true' (http://code.google.com/apis/maps/documentation/javascript/controls.html)
 	var $defaultLatitude=40.69847032728747;		//Default latitude if the browser doesn't support localization or you don't want localization
 	var $defaultLongitude=-73.9514422416687;	//Default longitude if the browser doesn't support localization or you don't want localization
 	var $defaultLocalize=true;					//Boolean to localize your position or not
@@ -114,36 +127,64 @@ class GoogleMapV3Helper extends Helper {
      */	
 	function map($options=null){
 		if($options!=null) extract($options);
+		if(!isset($id)) 		$width=$this->defaultId;
 		if(!isset($width)) 		$width=$this->defaultWidth;
 		if(!isset($height)) 	$height=$this->defaultHeight;	
 		if(!isset($zoom)) 		$zoom=$this->defaultZoom;			
-		if(!isset($type)) 		$type=$this->defaultType;		
-		if(!isset($latitude)) 	$latitude=$this->defaultLatitude;	
-		if(!isset($longitude)) 	$longitude=$this->defaultLongitude;
+		if(!isset($type)) 		$type=$this->defaultType;
+		if(!isset($custom))		$custom = $this->defaultCustom;		
 		if(!isset($localize)) 	$localize=$this->defaultLocalize;		
 		if(!isset($marker)) 	$marker=$this->defaultMarker;		
 		if(!isset($markerIcon)) $markerIcon=$this->defaultMarkerIcon;	
 		if(!isset($infoWindow)) $infoWindow=$this->defaultInfoWindow;	
 		if(!isset($windowText)) $windowText=$this->defaultWindowText;	
-		if(!isset($custom))		$custom = null;
 
 		$map = "<div id='$id' style='$style'></div>";
+		$map .="
+			<script>
+			var geocoder = new google.maps.Geocoder();
+			function geocodeAddress(address, action) {
+			    geocoder.geocode( { 'address': address}, function(results, status) {
+			      if (status == google.maps.GeocoderStatus.OK) {
+			      	//alert(results[0].geometry.location);
+			      	if(action =='setCenter'){
+			      		setCenterMap(results[0].geometry.location);";
+						if($marker) $map .= "setMarker(results[0].geometry.location);";
+					$map .= "
+			      	}
+			      } else {
+			        alert('Geocode was not successful for the following reason: ' + status);
+			        return null;
+			      }
+			    });
+			}";
+		
 		$map .= "
-		<script>
-			var noLocation = new google.maps.LatLng({$latitude}, {$longitude});
 			var initialLocation;
 		    var browserSupportFlag =  new Boolean();
 		    var map;
 		    var myOptions = {
 		      zoom: {$zoom},
 		      mapTypeId: google.maps.MapTypeId.{$type}
-		      ".(($custom != null)? ",$custom" : "")."
+		      ".(($custom != "")? ",$custom" : "")."
 		      
 		    };
 		    map = new google.maps.Map(document.getElementById('$id'), myOptions);
-	     
 		";
-		if($localize) $map .= "localize();"; else $map .= "map.setCenter(noLocation);";
+		$map.="
+			function setCenterMap(position){
+		";
+		if($localize) $map .= "localize();"; 
+		else {
+			$map .= "map.setCenter(position);";
+			if($marker) $map .= "setMarker(position);";
+		}
+		$map .="
+			}
+		";
+		if(isset($latitude) && isset($longitude)) $map .="setCenterMap(new google.maps.LatLng({$latitude}, {$longitude}));";
+		else if(isset($address)) $map .="geocodeAddress('{$address}','setCenter') ; ";
+		else $map .="setCenterMap(new google.maps.LatLng({$this->defaultLatitude}, {$this->defaultLongitude}));";
 		$map .= "
 			function localize(){
 		        if(navigator.geolocation) { // Try W3C Geolocation method (Preferred)
