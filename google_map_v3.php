@@ -104,12 +104,17 @@ class GoogleMapV3Helper extends Helper {
 	var $defaultLocalize=true;					//Boolean to localize your position or not
 	var $defaultMarker=true;					//Boolean to put a marker in the position or not
 	var $defaultMarkerIcon='http://google-maps-icons.googlecode.com/files/home.png'; //Default icon of the marker
+	var $defaultMarkerShadow='';				//Default shadow for the marker icon
+	var $defaultmarkerTitle="My Position";		//Default your position marker title
 	var $defaultInfoWindow=true;				//Boolean to show an information window when you click the marker or not
 	var $defaultWindowText='My Position';		//Default text inside the information window
 		
 	//DEFAULT MARKER OPTIONS (function addMarker())
 	var $defaultInfoWindowM=true;		//Boolean to show an information window when you click the marker or not
 	var $defaultWindowTextM=' ';		//Default text inside the information window
+	var $defaultmarkerTitleM="";
+	var $defaultmarkerIconM="";
+	var $defaultmarkerShadowM="";
 	
 	
 	/** 
@@ -135,22 +140,27 @@ class GoogleMapV3Helper extends Helper {
 		if(!isset($custom))		$custom = $this->defaultCustom;		
 		if(!isset($localize)) 	$localize=$this->defaultLocalize;		
 		if(!isset($marker)) 	$marker=$this->defaultMarker;		
-		if(!isset($markerIcon)) $markerIcon=$this->defaultMarkerIcon;	
+		if(!isset($markerIcon)) $markerIcon=$this->defaultMarkerIcon;
+		if(!isset($markerShadow)) $markerShadow = $this->defaultMarkerShadow;
+		if(!isset($markerTitle)) $markerTitle=$this->defaultmarkerTitle;	
 		if(!isset($infoWindow)) $infoWindow=$this->defaultInfoWindow;	
 		if(!isset($windowText)) $windowText=$this->defaultWindowText;	
 
 		$map = "<div id='$id' style='$style'></div>";
 		$map .="
 			<script>
+			var markers = new Array();
+			var markersIds = new Array();
 			var geocoder = new google.maps.Geocoder();
-			function geocodeAddress(address, action) {
+			function geocodeAddress(address, action, map,markerId, markerTitle, markerIcon, markerShadow, windowText) {
 			    geocoder.geocode( { 'address': address}, function(results, status) {
 			      if (status == google.maps.GeocoderStatus.OK) {
 			      	//alert(results[0].geometry.location);
 			      	if(action =='setCenter'){
-			      		setCenterMap(results[0].geometry.location);";
-						if($marker) $map .= "setMarker(results[0].geometry.location);";
-					$map .= "
+			      		setCenterMap(results[0].geometry.location);
+			      	}
+			      	if(action =='setMarker'){
+			      		setMarker(map,markerId,results[0].geometry.location,markerTitle, markerIcon, markerShadow,windowText);
 			      	}
 			      } else {
 			        alert('Geocode was not successful for the following reason: ' + status);
@@ -162,22 +172,22 @@ class GoogleMapV3Helper extends Helper {
 		$map .= "
 			var initialLocation;
 		    var browserSupportFlag =  new Boolean();
-		    var map;
+		    var {$id};
 		    var myOptions = {
 		      zoom: {$zoom},
 		      mapTypeId: google.maps.MapTypeId.{$type}
 		      ".(($custom != "")? ",$custom" : "")."
 		      
 		    };
-		    map = new google.maps.Map(document.getElementById('$id'), myOptions);
+		    {$id} = new google.maps.Map(document.getElementById('$id'), myOptions);
 		";
 		$map.="
 			function setCenterMap(position){
 		";
 		if($localize) $map .= "localize();"; 
 		else {
-			$map .= "map.setCenter(position);";
-			if($marker) $map .= "setMarker(position);";
+			$map .= "{$id}.setCenter(position);";
+			if($marker) $map .= "setMarker({$id},'center',position,'{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}');";
 		}
 		$map .="
 			}
@@ -191,8 +201,8 @@ class GoogleMapV3Helper extends Helper {
 		            browserSupportFlag = true;
 		            navigator.geolocation.getCurrentPosition(function(position) {
 		              initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-		              map.setCenter(initialLocation);";
-					  if($marker) $map .= "setMarker(initialLocation);";
+		              {$id}.setCenter(initialLocation);";
+					  if($marker) $map .= "setMarker({$id},'center',initialLocation,'{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}');";
 		                       
 		            $map .= "}, function() {
 		              handleNoGeolocation(browserSupportFlag);
@@ -203,8 +213,8 @@ class GoogleMapV3Helper extends Helper {
 		            var geo = google.gears.factory.create('beta.geolocation');
 		            geo.getCurrentPosition(function(position) {
 		              initialLocation = new google.maps.LatLng(position.latitude,position.longitude);
-		              map.setCenter(initialLocation);";
-					  if($marker) $map .= "setMarker(initialLocation);";         
+		              {$id}.setCenter(initialLocation);";
+					  if($marker) $map .= "setMarker({$id},'center',initialLocation,'{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}');";         
 		        
 		            $map .= "}, function() {
 		              handleNoGeolocation(browserSupportFlag);
@@ -224,29 +234,31 @@ class GoogleMapV3Helper extends Helper {
 		          initialLocation = noLocation;
 		          contentString = \"Error: Your browser doesn't support geolocation.\";
 		        }
-		        map.setCenter(initialLocation);
-		        map.setZoom(3);
+		        {$id}.setCenter(initialLocation);
+		        {$id}.setZoom(3);
 		    }";
 
 		    $map .= "
-			function setMarker(position){
-		        var contentString = '".$windowText."';
-		        var image = '".$markerIcon."';
-		        var infowindow = new google.maps.InfoWindow({
-		            content: contentString
-		        });
-		        var marker = new google.maps.Marker({
+			function setMarker(map,id,position,title,icon,shadow,content){
+				var index = markers.length;
+				markersIds[markersIds.length] = id;
+				markers[index] = new google.maps.Marker({
 		            position: position,
 		            map: map,
-		            icon: image,
-		            title:\"My Position\"
-		        });";
-		     if($infoWindow){   
-		     	$map .= "google.maps.event.addListener(marker, 'click', function() {
-								infowindow.open(map,marker);
-		        			});";
-		     }
-		     $map .= "}";
+		            icon: icon,
+		            shadow: shadow,
+		            title:title
+		        });
+		     	if(content != ''){
+			     	var infowindow = new google.maps.InfoWindow({
+			            content: content
+			        });
+			     	google.maps.event.addListener(markers[index], 'click', function() {
+						infowindow.open(map,markers[index]);
+        			});
+		        }
+		     }";
+
 		$map .= "</script>";
 		return $map;
 	}
@@ -264,35 +276,25 @@ class GoogleMapV3Helper extends Helper {
      * @return string - will return all the javascript script to add the marker to the map
      * 
      */ 
-	function addMarker($options){
-		if($options==null) return null;
+	function addMarker($map_id,$id,$options){
+		if($options==null || $id == null || $map_id==null) return null;
 		extract($options);
-		if(!isset($latitude) || $latitude==null || !isset($longitude) || $longitude==null) return null;
-		if (!preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $latitude) || !preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $longitude)) return null;		
-		if(!isset($id)) $id=rand();
+		if((!isset($latitude) || !isset($longitude)) && !($address)) return null;	
 		if(!isset($infoWindow)) $infoWindow=$this->defaultInfoWindowM;
 		if(!isset($windowText)) $windowText=$this->defaultWindowTextM;
+		if(!isset($markerTitle)) $markerTitle=$this->defaultmarkerTitleM;
+		if(!isset($markerIcon)) $markerIcon=$this->defaultmarkerIconM;
+		if(!isset($markerShadow)) $markerShadow=$this->defaultmarkerShadowM;
 		$marker = "<script>";
-		if(isset($markerIcon)) $marker .= "var image = '".$markerIcon."';";
-		if(isset($shadowIcon)) $marker .= "var shadowImage = '".$shadowIcon."';";
-		$marker .= "var myLatLng = new google.maps.LatLng(".$latitude.", ".$longitude.");
-			  	var marker".$id." = new google.maps.Marker({
-			      	position: myLatLng,
-			     	map: map,";
-			        if(isset($markerIcon)) $marker .= "icon: image,";
-			        if(isset($shadowIcon)) $marker .= "shadow: shadowImage,";
-		$marker .= "
-			});";
-		$marker .= "
-			var contentString = '".$windowText."';
-	        var infowindow".$id." = new google.maps.InfoWindow({
-	            content: contentString
-	        });";
-		if($infoWindow){   
-		     	$marker .= "google.maps.event.addListener(marker".$id.", 'click', function() {
-								infowindow".$id.".open(map,marker".$id.");
-		        			});";
-	    }
+		
+		if(!isset($address)){
+			if (!preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $latitude) || !preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $longitude)) return null;
+			$marker .= "setMarker({$map_id},'{$id}',new google.maps.LatLng($latitude, $longitude),'{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}')";
+		}else{
+			if($address!=null)
+				$marker .= "geocodeAddress('{$address}', 'setMarker', {$map_id},'{$id}','{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}')";
+		}
+		
 		$marker .= "</script>";
 		return $marker;
 	}
