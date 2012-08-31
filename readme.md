@@ -30,7 +30,7 @@ Below are the options available to set to your map:
 * **style:** Map canvas CSS style
 * **zoom:** Map zoom
 * **type:** Type of map - `ROADMAP`, `SATELLITE`, `HYBRID` or `TERRAIN`
-* **custom:** Any other map option not mentioned before and available for the map. For example `mapTypeControl: true` (http://code.google.com/apis/maps/documentation/javascript/controls.html)
+* **custom:** Any other map option not mentioned before and available for the map. For example `mapTypeControl: true`. See more map options at: https://developers.google.com/maps/documentation/javascript/controls
 * **latitude:** Default latitude if the browser doesn't support localization or you don't want localization (Latitude & Langitude have priority versus Address)
 * **longitude:** Default longitude if the browser doesn't support localization or you don't want localization (Latitude & Langitude have priority versus Address)
 * **address:** Default address if the browser doesn't support localization or you don't want localization (Latitude & Langitude have priority versus Address)
