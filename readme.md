@@ -3,5 +3,6 @@ Helper for CakePHP framework that integrates a Google Map in your view using Goo
 
 ## Installation
 Add this into your controller
-<pre><code>public $helpers = array('GoogleMap');   //Adding the helper</code></pre>
-    
+```php
+public $helpers = array('GoogleMap');   //Adding the helper
+```
