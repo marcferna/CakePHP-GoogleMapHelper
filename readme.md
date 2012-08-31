@@ -1,4 +1,4 @@
-## Google Maps for CakePHP 2.x
+# Google Maps for CakePHP 2.x
 Helper for CakePHP framework that integrates a Google Map in your view using Google Maps API V3.
 
 ## Installation
