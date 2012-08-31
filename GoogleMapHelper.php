@@ -32,7 +32,7 @@
  
   USAGE:
     In your CONTROLLER:
-    	var $helpers = array('GoogleMapV3'); 	//Add the helper
+    	public $helpers = array('GoogleMap'); 	//Add the helper
 
   	In your VIEW:
   		First we add the Google Maps API (Note that Google Maps API V3 does NOT require a API Key):
