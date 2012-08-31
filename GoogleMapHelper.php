@@ -37,12 +37,11 @@
   	In your VIEW:
   		First we add the Google Maps API (Note that Google Maps API V3 does NOT require a API Key):
   		
-  		<?php echo $this->Html->script('http://maps.google.com/maps/api/js?sensor=true',false); ?>
-			<?php echo $this->Html->script('http://code.google.com/apis/gears/gears_init.js',false); ?>
+  		<?= $this->Html->script('http://maps.google.com/maps/api/js?sensor=true',false); ?>
 			
   		Then we can add a map:
   
-  		<?php echo $this->GoogleMapV3->map(); ?>
+  		<?= $this->GoogleMapV3->map(); ?>
   		
   		OR
   		
@@ -94,7 +93,7 @@ class GoogleMapHelper extends AppHelper {
 	var $defaultId = "map_canvas";																											//Map canvas ID
 	var $defaultWidth = "800px";																												//Width of the map
 	var $defaultHeight = "800px";																												//Height of the map
-	var $defaultStyle = "";																															//CSS style for the map canvas
+	var $defaultStyle = "style";																															//CSS style for the map canvas
 	var $defaultZoom = 6;																																//Default zoom
 	var $defaultType = 'HYBRID';																												//Type of map (ROADMAP, SATELLITE, HYBRID or TERRAIN)
 	var $defaultCustom = "";																														//Any other map option not mentioned before and available for the map. 
@@ -139,6 +138,7 @@ class GoogleMapHelper extends AppHelper {
 		if( !isset($id) ) 					$id = $this->defaultId;
 		if( !isset($width) ) 				$width = $this->defaultWidth;
 		if( !isset($height) ) 			$height = $this->defaultHeight;	
+		if( !isset($style) ) 				$style = $this->defaultStyle;
 		if( !isset($zoom) ) 				$zoom = $this->defaultZoom;			
 		if( !isset($type) ) 				$type = $this->defaultType;
 		if( !isset($custom) )				$custom = $this->defaultCustom;		
@@ -150,7 +150,7 @@ class GoogleMapHelper extends AppHelper {
 		if( !isset($infoWindow) ) 	$infoWindow = $this->defaultInfoWindow;	
 		if( !isset($windowText) ) 	$windowText = $this->defaultWindowText;	
 
-		$map = "<div id='$id' style='$style'></div>";
+		$map = "<div id='$id' style='width:$width; height:$height; $style'></div>";
 		$map .="
 			<script>
 				var markers = new Array();
@@ -268,18 +268,18 @@ class GoogleMapHelper extends AppHelper {
 	}
 	
 	
-	/** 
-     * Function addMarker 
-     * 
-     * This method puts a marker in the google map generated with the function map
-     * 
-     * Pass an array with the options listed above in order to customize it
-     * 
-     * @author Marc Fernandez <info (at) marcfg (dot) com> 
-     * @param array $options - options array 
-     * @return string - will return all the javascript script to add the marker to the map
-     * 
-     */ 
+	/* 
+	* Function addMarker 
+	* 
+	* This method puts a marker in the google map generated with the function map
+	* 
+	* Pass an array with the options listed above in order to customize it
+	* 
+	* @author Marc Fernandez <marc.fernandezg (at) gmail (dot) com> 
+	* @param array $options - options array 
+	* @return string - will return all the javascript script to add the marker to the map
+	* 
+	*/ 
 	function addMarker($map_id,$id,$options){
 		if($options==null || $id == null || $map_id==null) return null;
 		extract($options);
