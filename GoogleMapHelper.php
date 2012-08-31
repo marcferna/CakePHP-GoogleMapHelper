@@ -1,7 +1,7 @@
 <?php
 /*
-  	CakePHP Google Map V3 - Helper to CakePHP framework that integrates a Google Map in your view
-  	using Google Maps API V3.
+  CakePHP Google Map V3 - Helper to CakePHP framework that integrates a Google Map in your view
+  using Google Maps API V3.
   
 	Copyright (c) 2012 Marc Fernandez Girones: info@marcfg.com
 
@@ -23,29 +23,26 @@
 	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 	THE SOFTWARE.
-  
-	MarcFG : http://www.marcfg.com
-	 
-	@author      Marc Fernandez Girones <info@marcfg.com>
-	@version     2.0
+   
+	@author      Marc Fernandez Girones <marc.fernandezg@gmail.com>
+	@version     3.0
 	@license     OPPL
 	 
 	Date	     May 13, 2010
  
-    USAGE:
-    
+  USAGE:
     In your CONTROLLER:
     	var $helpers = array('GoogleMapV3'); 	//Add the helper
 
   	In your VIEW:
   		First we add the Google Maps API (Note that Google Maps API V3 does NOT require a API Key):
   		
-  			<?php echo $this->Html->script('http://maps.google.com/maps/api/js?sensor=true',false); ?>
+  		<?php echo $this->Html->script('http://maps.google.com/maps/api/js?sensor=true',false); ?>
 			<?php echo $this->Html->script('http://code.google.com/apis/gears/gears_init.js',false); ?>
 			
   		Then we can add a map:
   
-  			<?php echo $this->GoogleMapV3->map(); ?>
+  		<?php echo $this->GoogleMapV3->map(); ?>
   		
   		OR
   		
@@ -70,104 +67,111 @@
 			echo $this->GoogleMapV3->map($mapOptions); To add a map that localizes you
 		
 		To add a marker:
-  			echo $this->GoogleMapV3->addMarker(array('latitude'=>40.69847,'longitude'=>-73.9514));
+  		echo $this->GoogleMapV3->addMarker(array('latitude'=>40.69847,'longitude'=>-73.9514));
   			
   		OR
   		
   		You can also pass to the function a variable with any of the followings options and change the default parameters
-		$markerOptions= array(
-			'id'=>1								//Id of the marker
-			'latitude'=>40.69847032728747,		//Latitude of the marker
-			'longitude'=>-1.9514422416687,		//Longitude of the marker
-			'markerIcon'=>'http://google-maps-icons.googlecode.com/files/home.png', //Custom icon
-			'shadowIcon'=>'http://google-maps-icons.googlecode.com/files/home.png', //Custom shadow
-			'infoWindow'=>true,					//Boolean to show an information window when you click the marker or not
-			'windowText'=>'Marker'				//Default text inside the information window
-		);
+
+			$markerOptions= array(
+				'id'=>1								//Id of the marker
+				'latitude'=>40.69847032728747,		//Latitude of the marker
+				'longitude'=>-1.9514422416687,		//Longitude of the marker
+				'markerIcon'=>'http://google-maps-icons.googlecode.com/files/home.png', //Custom icon
+				'shadowIcon'=>'http://google-maps-icons.googlecode.com/files/home.png', //Custom shadow
+				'infoWindow'=>true,					//Boolean to show an information window when you click the marker or not
+				'windowText'=>'Marker'				//Default text inside the information window
+			);
   		
-  	This helper uses the latest Google API V3 so you don't need to provide or get any Google API Key
+  This helper uses the latest Google API V3 so you don't need to provide or get any Google API Key
+
 */
 
-class GoogleMapV3Helper extends Helper {
+class GoogleMapHelper extends AppHelper {
 
 	
 	//DEFAULT MAP OPTIONS (function map())
-	var $defaultId="map_canvas";				//Map canvas ID
-	var $defaultWidth="800px";					//Width of the map
-	var $defaultHeight="800px";					//Height of the map
-	var $defaultStyle ="";						//CSS style for the map canvas
-	var $defaultZoom=6;							//Default zoom
-	var $defaultType='HYBRID';					//Type of map (ROADMAP, SATELLITE, HYBRID or TERRAIN)
-	var $defaultCustom = "";					//Any other map option not mentioned before and available for the map. For example 'mapTypeControl: true' (http://code.google.com/apis/maps/documentation/javascript/controls.html)
-	var $defaultLatitude=40.69847032728747;		//Default latitude if the browser doesn't support localization or you don't want localization
-	var $defaultLongitude=-73.9514422416687;	//Default longitude if the browser doesn't support localization or you don't want localization
-	var $defaultLocalize=true;					//Boolean to localize your position or not
-	var $defaultMarker=true;					//Boolean to put a marker in the position or not
-	var $defaultMarkerIcon='http://google-maps-icons.googlecode.com/files/home.png'; //Default icon of the marker
-	var $defaultMarkerShadow='';				//Default shadow for the marker icon
-	var $defaultmarkerTitle="My Position";		//Default your position marker title
-	var $defaultInfoWindow=true;				//Boolean to show an information window when you click the marker or not
-	var $defaultWindowText='My Position';		//Default text inside the information window
+	var $defaultId = "map_canvas";																											//Map canvas ID
+	var $defaultWidth = "800px";																												//Width of the map
+	var $defaultHeight = "800px";																												//Height of the map
+	var $defaultStyle = "";																															//CSS style for the map canvas
+	var $defaultZoom = 6;																																//Default zoom
+	var $defaultType = 'HYBRID';																												//Type of map (ROADMAP, SATELLITE, HYBRID or TERRAIN)
+	var $defaultCustom = "";																														//Any other map option not mentioned before and available for the map. 
+																																											//For example 'mapTypeControl: true' (http://code.google.com/apis/maps/documentation/javascript/controls.html)
+	var $defaultLatitude = 40.69847032728747;																						//Default latitude if the browser doesn't support localization or you don't want localization
+	var $defaultLongitude = -73.9514422416687;																					//Default longitude if the browser doesn't support localization or you don't want localization
+	var $defaultLocalize = true;																												//Boolean to localize your position or not
+	var $defaultMarker = true;																													//Boolean to put a marker in the position or not
+	var $defaultMarkerIcon = 'http://google-maps-icons.googlecode.com/files/home.png'; 	//Default icon of the marker
+	var $defaultMarkerShadow = '';																											//Default shadow for the marker icon
+	var $defaultmarkerTitle = "My Position";																						//Default your position marker title
+	var $defaultInfoWindow = true;																											//Boolean to show an information window when you click the marker or not
+	var $defaultWindowText = 'My Position';																							//Default text inside the information window
 		
 	//DEFAULT MARKER OPTIONS (function addMarker())
-	var $defaultInfoWindowM=true;		//Boolean to show an information window when you click the marker or not
-	var $defaultWindowTextM=' ';		//Default text inside the information window
-	var $defaultmarkerTitleM="";
-	var $defaultmarkerIconM="";
-	var $defaultmarkerShadowM="";
+	var $defaultInfoWindowM = true;																											//Boolean to show an information window when you click the marker or not
+	var $defaultWindowTextM = ' ';																											//Default text inside the information window
+	var $defaultmarkerTitleM = "";																											//
+	var $defaultmarkerIconM = "";																												//
+	var $defaultmarkerShadowM = "";																											//
 	
 	
-	/** 
-     * Function map 
-     * 
-     * This method generates a tag called map_canvas and insert
-     * a google maps.
-     * 
-     * Pass an array with the options listed above in order to customize it
-     * 
-     * @author Marc Fernandez <info (at) marcfg (dot) com> 
-     * @param array $options - options array 
-     * @return string - will return all the javascript script to generate the map
-     * 
-     */	
-	function map($options=null){
-		if($options!=null) extract($options);
-		if(!isset($id)) 		$width=$this->defaultId;
-		if(!isset($width)) 		$width=$this->defaultWidth;
-		if(!isset($height)) 	$height=$this->defaultHeight;	
-		if(!isset($zoom)) 		$zoom=$this->defaultZoom;			
-		if(!isset($type)) 		$type=$this->defaultType;
-		if(!isset($custom))		$custom = $this->defaultCustom;		
-		if(!isset($localize)) 	$localize=$this->defaultLocalize;		
-		if(!isset($marker)) 	$marker=$this->defaultMarker;		
-		if(!isset($markerIcon)) $markerIcon=$this->defaultMarkerIcon;
-		if(!isset($markerShadow)) $markerShadow = $this->defaultMarkerShadow;
-		if(!isset($markerTitle)) $markerTitle=$this->defaultmarkerTitle;	
-		if(!isset($infoWindow)) $infoWindow=$this->defaultInfoWindow;	
-		if(!isset($windowText)) $windowText=$this->defaultWindowText;	
+	/* 
+	* Function map 
+	* 
+	* This method generates a tag called map_canvas and insert
+	* a google maps.
+	* 
+	* Pass an array with the options listed above in order to customize it
+	* 
+	* @author Marc Fernandez <marc.fernandezg (at) gmail (dot) com> 
+	* @param array $options - options array 
+	* @return string - will return all the javascript script to generate the map
+	* 
+	*/	
+	public function map($options = null)
+	{
+		if( $options != null )
+		{
+			extract($options);
+		}
+		if( !isset($id) ) 					$id = $this->defaultId;
+		if( !isset($width) ) 				$width = $this->defaultWidth;
+		if( !isset($height) ) 			$height = $this->defaultHeight;	
+		if( !isset($zoom) ) 				$zoom = $this->defaultZoom;			
+		if( !isset($type) ) 				$type = $this->defaultType;
+		if( !isset($custom) )				$custom = $this->defaultCustom;		
+		if( !isset($localize) ) 		$localize = $this->defaultLocalize;		
+		if( !isset($marker) ) 			$marker = $this->defaultMarker;		
+		if( !isset($markerIcon) ) 	$markerIcon = $this->defaultMarkerIcon;
+		if( !isset($markerShadow) ) $markerShadow = $this->defaultMarkerShadow;
+		if( !isset($markerTitle) ) 	$markerTitle = $this->defaultmarkerTitle;	
+		if( !isset($infoWindow) ) 	$infoWindow = $this->defaultInfoWindow;	
+		if( !isset($windowText) ) 	$windowText = $this->defaultWindowText;	
 
 		$map = "<div id='$id' style='$style'></div>";
 		$map .="
 			<script>
-			var markers = new Array();
-			var markersIds = new Array();
-			var geocoder = new google.maps.Geocoder();
-			function geocodeAddress(address, action, map,markerId, markerTitle, markerIcon, markerShadow, windowText) {
-			    geocoder.geocode( { 'address': address}, function(results, status) {
-			      if (status == google.maps.GeocoderStatus.OK) {
-			      	//alert(results[0].geometry.location);
-			      	if(action =='setCenter'){
-			      		setCenterMap(results[0].geometry.location);
-			      	}
-			      	if(action =='setMarker'){
-			      		setMarker(map,markerId,results[0].geometry.location,markerTitle, markerIcon, markerShadow,windowText);
-			      	}
-			      } else {
-			        alert('Geocode was not successful for the following reason: ' + status);
-			        return null;
-			      }
-			    });
-			}";
+				var markers = new Array();
+				var markersIds = new Array();
+				var geocoder = new google.maps.Geocoder();
+				function geocodeAddress(address, action, map,markerId, markerTitle, markerIcon, markerShadow, windowText) {
+				    geocoder.geocode( { 'address': address}, function(results, status) {
+				      if (status == google.maps.GeocoderStatus.OK) {
+				      	//alert(results[0].geometry.location);
+				      	if(action =='setCenter'){
+				      		setCenterMap(results[0].geometry.location);
+				      	}
+				      	if(action =='setMarker'){
+				      		setMarker(map,markerId,results[0].geometry.location,markerTitle, markerIcon, markerShadow,windowText);
+				      	}
+				      } else {
+				        alert('Geocode was not successful for the following reason: ' + status);
+				        return null;
+				      }
+				    });
+				}";
 		
 		$map .= "
 			var initialLocation;
