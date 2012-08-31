@@ -44,21 +44,21 @@ In order modify any of the default options you need to create your map passing t
 ```php
 <?
 $mapOptions = array(
-  'id'='map_canvas',        
-  'width'=>'800px', 
-  'height'=>'800px',
-  'style' =>'',
-  'zoom'=>7,
-  'type'=>'HYBRID',
-  'custom'=>null,
-  'latitude'=>40.69847032728747,
-  'longitude'=>-1.9514422416687,
-  'address="1 Infinite Loop, Cupertino";
-  'localize'=>true,
-  'marker'=>true,
-  'markerIcon'=>'http://google-maps-icons.googlecode.com/files/home.png',
-  'infoWindow'=>true,
-  'windowText'=>'My Position'
+  'id' => 'map_canvas',        
+  'width' => '800px', 
+  'height' => '800px',
+  'style' => '',
+  'zoom' => 7,
+  'type' => 'HYBRID',
+  'custom' => null,
+  'latitude' => 40.69847032728747,
+  'longitude' => -1.9514422416687,
+  'address' => '1 Infinite Loop, Cupertino',
+  'localize' => true,
+  'marker' => true,
+  'markerIcon' => 'http://google-maps-icons.googlecode.com/files/home.png',
+  'infoWindow' => true,
+  'windowText' => 'My Position'
 );
 ?>
 
