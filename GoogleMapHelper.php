@@ -110,11 +110,10 @@ class GoogleMapHelper extends AppHelper {
 		
 	//DEFAULT MARKER OPTIONS (function addMarker())
 	var $defaultInfoWindowM = true;																											//Boolean to show an information window when you click the marker or not
-	var $defaultWindowTextM = ' ';																											//Default text inside the information window
-	var $defaultmarkerTitleM = "";																											//
-	var $defaultmarkerIconM = "";																												//
-	var $defaultmarkerShadowM = "";																											//
-	
+	var $defaultWindowTextM = 'Marker info window';																											//Default text inside the information window
+	var $defaultmarkerTitleM = "Title";																											//
+	var $defaultmarkerIconM = "http://labs.google.com/ridefinder/images/mm_20_purple.png";																												//
+	var $defaultmarkerShadowM = "http://labs.google.com/ridefinder/images/mm_20_purple.png";																											//
 	
 	/* 
 	* Function map 
@@ -280,23 +279,36 @@ class GoogleMapHelper extends AppHelper {
 	* @return string - will return all the javascript script to add the marker to the map
 	* 
 	*/ 
-	function addMarker($map_id,$id,$options){
-		if($options==null || $id == null || $map_id==null) return null;
+	function addMarker($map_id, $id, $position, $options = array()){
+		if($id == null || $map_id == null || $position == null) return null;
+		$geolocation = false;
+		// Check if position is array and has the two necessary elements
+		// or if is not array that the string is not empty
+		if( is_array($position) ){
+			if( !isset($position["latitude"]) || !isset($position["longitude"]) )  
+				return null;
+			$latitude = $position["latitude"];
+			$longitude = $position["longitude"];
+		}else{
+			$geolocation = true;
+		}
+
 		extract($options);
-		if((!isset($latitude) || !isset($longitude)) && !($address)) return null;	
-		if(!isset($infoWindow)) $infoWindow=$this->defaultInfoWindowM;
-		if(!isset($windowText)) $windowText=$this->defaultWindowTextM;
-		if(!isset($markerTitle)) $markerTitle=$this->defaultmarkerTitleM;
-		if(!isset($markerIcon)) $markerIcon=$this->defaultmarkerIconM;
-		if(!isset($markerShadow)) $markerShadow=$this->defaultmarkerShadowM;
+		if( !isset($infoWindow) ) 		$infoWindow = $this->defaultInfoWindowM;
+		if( !isset($windowText) ) 		$windowText = $this->defaultWindowTextM;
+		if( !isset($markerTitle) ) 		$markerTitle = $this->defaultmarkerTitleM;
+		if( !isset($markerIcon) ) 		$markerIcon = $this->defaultmarkerIconM;
+		if( !isset($markerShadow) ) 	$markerShadow = $this->defaultmarkerShadowM;
 		$marker = "<script>";
 		
-		if(!isset($address)){
+		if(!$geolocation){
 			if (!preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $latitude) || !preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $longitude)) return null;
+			echo "hola";
+
 			$marker .= "setMarker({$map_id},'{$id}',new google.maps.LatLng($latitude, $longitude),'{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}')";
 		}else{
-			if($address!=null)
-				$marker .= "geocodeAddress('{$address}', 'setMarker', {$map_id},'{$id}','{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}')";
+			if( empty($position) ) return null;
+			$marker .= "geocodeAddress('{$position}', 'setMarker', {$map_id},'{$id}','{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}')";
 		}
 		
 		$marker .= "</script>";
