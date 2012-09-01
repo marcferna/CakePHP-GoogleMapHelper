@@ -2,6 +2,8 @@
 Helper for CakePHP framework that integrates a Google Map in your view using Google Maps API V3.
 
 ## Installation
+Place the helper into **app/View/Helper/GoogleMapHelper.php
+
 Add this line into the **controller**:
 ```php
 public $helpers = array('GoogleMap');   //Adding the helper
@@ -19,7 +21,7 @@ To add the api key:
 
 ## Usage
 ```php
-<?= $this->GoogleMap->map(); ?>   //Adding the map to your view
+<?= $this->GoogleMap->map(); //Adding the map to your view ?>
 ```
 
 ## Map Options
