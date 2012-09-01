@@ -43,7 +43,7 @@ Below are the options available to set to your map:
 * **infoWindow:** Boolean to show an information window when you click your position marker or not
 * **windowText:** Default text inside your position marker´s information window
 
-In order modify any of the default options shown below you need to create your map passing the array as follows:
+In order modify any of the default options shown above you need to create your map passing the array as follows:
 ```php
 <?
   // Override any of the following default options to customize your map
@@ -97,16 +97,20 @@ There are some marker options available to customize the marker popup info windo
 * **markerIcon:** Marker icon
 * **markerShadow:** Marker icon shadow
 
+In order modify any of the default options shown above you need to create your marker passing the array as follows:
 ```php
 
 <?
-  // Override any of the following default options to customize your map
+  // Override any of the following default options to customize your marker
   $marker_options = array(
     'showWindow' => true,
     'windowText' => 'Marker',
     'markerTitle' => 'Title',
-    'markerIcon' => 'http:// labs.google.com/ridefinder/images/mm_20_purple.png',
-    'markerShadow' => 'http:// labs.google.com/ridefinder/images/mm_20_purpleshadow.png',
+    'markerIcon' => 'http://labs.google.com/ridefinder/images/mm_20_purple.png',
+    'markerShadow' => 'http://labs.google.com/ridefinder/images/mm_20_purpleshadow.png',
   );
 ?>
+
+<?= $this->GoogleMap->addMarker("map_canvas", 1, "1 Infinite Loop, Cupertino, California", $marker_options); ?>
+
 ```
