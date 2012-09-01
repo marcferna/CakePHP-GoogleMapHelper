@@ -2,14 +2,14 @@
 Helper for CakePHP framework that integrates a Google Map in your view using Google Maps API V3.
 
 ## Installation
-Place the helper into **app/View/Helper/GoogleMapHelper.php
+1. Place the helper into **app/View/Helper/GoogleMapHelper.php**
 
-Add this line into the **controller**:
+2. Add this line into the **controller**:
 ```php
 public $helpers = array('GoogleMap');   //Adding the helper
 ```
 
-Then we need to add the necessary Javascript files into the **view**:
+3. Then we need to add the necessary Javascript files into the **view**:
 ```php
 <?= $this->Html->script('http://maps.google.com/maps/api/js?sensor=true', false); ?>
 ```
@@ -20,8 +20,9 @@ To add the api key:
 ```
 
 ## Usage
+Print the map to your view
 ```php
-<?= $this->GoogleMap->map(); //Adding the map to your view ?>
+<?= $this->GoogleMap->map(); ?>
 ```
 
 ## Map Options
@@ -42,27 +43,61 @@ Below are the options available to set to your map:
 * **infoWindow:** Boolean to show an information window when you click your position marker or not
 * **windowText:** Default text inside your position marker´s information window
 
-In order modify any of the default options you need to create your map passing the array follows:
+In order modify any of the default options shown below you need to create your map passing the array as follows:
 ```php
 <?
-$mapOptions = array(
-  'id' => 'map_canvas',        
-  'width' => '800px', 
-  'height' => '800px',
-  'style' => '',
-  'zoom' => 7,
-  'type' => 'HYBRID',
-  'custom' => null,
-  'latitude' => 40.69847032728747,
-  'longitude' => -1.9514422416687,
-  'address' => '1 Infinite Loop, Cupertino',
-  'localize' => true,
-  'marker' => true,
-  'markerIcon' => 'http://google-maps-icons.googlecode.com/files/home.png',
-  'infoWindow' => true,
-  'windowText' => 'My Position'
-);
+  // Override any of the following default options to customize your map
+  $map_options = array(
+    'id' => 'map_canvas',        
+    'width' => '800px', 
+    'height' => '800px',
+    'style' => '',
+    'zoom' => 7,
+    'type' => 'HYBRID',
+    'custom' => null,
+    'latitude' => 40.69847032728747,
+    'longitude' => -1.9514422416687,
+    'address' => '1 Infinite Loop, Cupertino',
+    'localize' => true,
+    'marker' => true,
+    'markerIcon' => 'http://google-maps-icons.googlecode.com/files/home.png',
+    'infoWindow' => true,
+    'windowText' => 'My Position'
+  );
 ?>
 
-<?= $this->GoogleMap->map($mapOptions); ?>   //Adding the map to your view
+<?= $this->GoogleMap->map($map_options); ?>
+```
+
+## Adding Markers
+To add a marker use:
+```php
+<?= $this->GoogleMap->addMarker($map_id, $marker_id, $position); ?>
+```
+Where:
+* **$map_id** is the map canvas id ('map_canvas' by default)
+* **$marker_id** is the unique identifiyer for that marker
+* **$position** could be a simple string with the address or an array with latitude and longitude.
+
+**Example with address (using geolocation)**
+```php
+<?= $this->GoogleMap->addMarker("map_canvas", 1, "1 Infinite Loop, Cupertino, California"); ?>
+```
+
+**Example with latitude and longitude**
+```php
+<?= $this->GoogleMap->addMarker("map_canvas", 1, array('latitude' => 40.69847, 'longitude' => -73.9514)); ?>
+```
+
+## Marker Options
+
+```php
+  $markerOptions= array(
+  	'latitude'=>40.69847032728747,		//Latitude of the marker
+  	'longitude'=>-1.9514422416687,		//Longitude of the marker
+  	'markerIcon'=>'http://google-maps-icons.googlecode.com/files/home.png', //Custom icon
+  	'shadowIcon'=>'http://google-maps-icons.googlecode.com/files/home.png', //Custom shadow
+  	'infoWindow'=>true,					//Boolean to show an information window when you click the marker or not
+  	'windowText'=>'Marker'				//Default text inside the information window
+	);
 ```
