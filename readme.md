@@ -90,14 +90,23 @@ Where:
 ```
 
 ## Marker Options
+There are some marker options available to customize the marker popup info window:
+* **showWindow:** Boolean to show or not the popup info window
+* **windowText:** Text to show inside the popup info window
+* **markerTitle:** 
+* **markerIcon:** Marker icon
+* **markerShadow:** Marker icon shadow
 
 ```php
-  $markerOptions= array(
-  	'latitude'=>40.69847032728747,		//Latitude of the marker
-  	'longitude'=>-1.9514422416687,		//Longitude of the marker
-  	'markerIcon'=>'http://google-maps-icons.googlecode.com/files/home.png', //Custom icon
-  	'shadowIcon'=>'http://google-maps-icons.googlecode.com/files/home.png', //Custom shadow
-  	'infoWindow'=>true,					//Boolean to show an information window when you click the marker or not
-  	'windowText'=>'Marker'				//Default text inside the information window
-	);
+
+<?
+  // Override any of the following default options to customize your map
+  $marker_options = array(
+    'showWindow' => true,
+    'windowText' => 'Marker',
+    'markerTitle' => 'Title',
+    'markerIcon' => 'http:// labs.google.com/ridefinder/images/mm_20_purple.png',
+    'markerShadow' => 'http:// labs.google.com/ridefinder/images/mm_20_purpleshadow.png',
+  );
+?>
 ```
