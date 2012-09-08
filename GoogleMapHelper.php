@@ -38,35 +38,35 @@ class GoogleMapHelper extends AppHelper {
 
 	
 	//DEFAULT MAP OPTIONS (function map())
-	var $defaultId = "map_canvas";																											//Map canvas ID
-	var $defaultWidth = "800px";																												//Width of the map
-	var $defaultHeight = "800px";																												//Height of the map
-	var $defaultStyle = "style";																															//CSS style for the map canvas
-	var $defaultZoom = 6;																																//Default zoom
-	var $defaultType = 'HYBRID';																												//Type of map (ROADMAP, SATELLITE, HYBRID or TERRAIN)
-	var $defaultCustom = "";																														//Any other map option not mentioned before and available for the map. 
-																																											//For example 'mapTypeControl: true' (http://code.google.com/apis/maps/documentation/javascript/controls.html)
-	var $defaultLatitude = 40.69847032728747;																						//Default latitude if the browser doesn't support localization or you don't want localization
-	var $defaultLongitude = -73.9514422416687;																					//Default longitude if the browser doesn't support localization or you don't want localization
-	var $defaultLocalize = true;																												//Boolean to localize your position or not
-	var $defaultMarker = true;	//Boolean to put a marker in the position or not
-	var $defaultMarkerTitle = 'My Position';																													
-	var $defaultMarkerIcon = 'http://google-maps-icons.googlecode.com/files/home.png'; 	//Default icon of the marker
-	var $defaultMarkerShadow = '';																											//Default shadow for the marker icon
-	var $defaultInfoWindow = true;																											//Boolean to show an information window when you click the marker or not
-	var $defaultWindowText = 'My Position';																							//Default text inside the information window
+	var $defaultId = "map_canvas";														// Map canvas ID
+	var $defaultWidth = "800px";														// Width of the map
+	var $defaultHeight = "800px";														// Height of the map
+	var $defaultStyle = "style";														// CSS style for the map canvas
+	var $defaultZoom = 6;																// Default zoom
+	var $defaultType = 'HYBRID';														// Type of map (ROADMAP, SATELLITE, HYBRID or TERRAIN)
+	var $defaultCustom = "";															// Any other map option not mentioned before and available for the map. 
+																						// For example 'mapTypeControl: true' (http://code.google.com/apis/maps/documentation/javascript/controls.html)
+	var $defaultLatitude = 40.69847032728747;											// Default latitude if the browser doesn't support localization or you don't want localization
+	var $defaultLongitude = -73.9514422416687;											// Default longitude if the browser doesn't support localization or you don't want localization
+	var $defaultLocalize = true;														// Boolean to localize your position or not
+	var $defaultMarker = true;															// Boolean to put a marker in the position or not
+	var $defaultMarkerTitle = 'My Position';											// Default marker title (HTML title tag)																		
+	var $defaultMarkerIcon = 'http://google-maps-icons.googlecode.com/files/home.png'; 	// Default icon of the marker
+	var $defaultMarkerShadow = '';														// Default shadow for the marker icon
+	var $defaultInfoWindow = true;														// Boolean to show an information window when you click the marker or not
+	var $defaultWindowText = 'My Position';												// Default text inside the information window
 		
 	//DEFAULT MARKER OPTIONS (function addMarker())
-	var $defaultInfoWindowM = true;																											//Boolean to show an information window when you click the marker or not
-	var $defaultWindowTextM = 'Marker info window';																											//Default text inside the information window
-	var $defaultmarkerTitleM = "Title";																											//
-	var $defaultmarkerIconM = "http://labs.google.com/ridefinder/images/mm_20_purple.png";																												//
-	var $defaultmarkerShadowM = "http://labs.google.com/ridefinder/images/mm_20_purple.png";																											//
+	var $defaultInfoWindowM = true;														// Boolean to show an information window when you click the marker or not
+	var $defaultWindowTextM = 'Marker info window';										// Default text inside the information window
+	var $defaultmarkerTitleM = "Title";													// Default marker title (HTML title tag)
+	var $defaultmarkerIconM = "http://maps.google.com/mapfiles/marker.png";				// Default icon of the marker
+	var $defaultmarkerShadowM = "http://maps.google.com/mapfiles/shadow50.png";			// Default shadow for the marker icon
 	
 	/* 
 	* Function map 
 	* 
-	* This method generates a tag called map_canvas and insert
+	* This method generates a div tag and inserts
 	* a google maps.
 	* 
 	* Pass an array with the options listed above in order to customize it
@@ -103,14 +103,14 @@ class GoogleMapHelper extends AppHelper {
 				var markers = new Array();
 				var markersIds = new Array();
 				var geocoder = new google.maps.Geocoder();
-				function geocodeAddress(address, action, map,markerId, markerTitle, markerIcon, markerShadow, windowText) {
+				function geocodeAddress(address, action, map,markerId, markerTitle, markerIcon, markerShadow, windowText, showInfoWindow) {
 				    geocoder.geocode( { 'address': address}, function(results, status) {
 				      if (status == google.maps.GeocoderStatus.OK) {
 				      	if(action =='setCenter'){
 				      		setCenterMap(results[0].geometry.location);
 				      	}
 				      	if(action =='setMarker'){
-				      		setMarker(map,markerId,results[0].geometry.location,markerTitle, markerIcon, markerShadow,windowText, ".($infoWindow? 'true' : 'false').");
+				      		setMarker(map,markerId,results[0].geometry.location,markerTitle, markerIcon, markerShadow,windowText, showInfoWindow);
 				      	}
 				      } else {
 				        alert('Geocode was not successful for the following reason: ' + status);
@@ -217,11 +217,14 @@ class GoogleMapHelper extends AppHelper {
 	/* 
 	* Function addMarker 
 	* 
-	* This method puts a marker in the google map generated with the function map
+	* This method puts a marker in the google map generated with the method map
 	* 
 	* Pass an array with the options listed above in order to customize it
 	* 
 	* @author Marc Fernandez <marc.fernandezg (at) gmail (dot) com> 
+	* @param $map_id - Id that you used to create the map (default 'map_canvas') 
+	* @param $id - Unique identifier for the marker
+	* @param mixed $position - string with the address or an array with latitude and longitude
 	* @param array $options - options array 
 	* @return string - will return all the javascript script to add the marker to the map
 	* 
@@ -251,10 +254,10 @@ class GoogleMapHelper extends AppHelper {
 		if(!$geolocation){
 			if (!preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $latitude) || !preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $longitude)) return null;
 
-			$marker .= "setMarker({$map_id},'{$id}',new google.maps.LatLng($latitude, $longitude),'{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}')";
+			$marker .= "setMarker({$map_id},'{$id}',new google.maps.LatLng($latitude, $longitude),'{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false').")";
 		}else{
 			if( empty($position) ) return null;
-			$marker .= "geocodeAddress('{$position}', 'setMarker', {$map_id},'{$id}','{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}')";
+			$marker .= "geocodeAddress('{$position}', 'setMarker', {$map_id},'{$id}','{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false').")";
 		}
 		
 		$marker .= "</script>";
