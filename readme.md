@@ -34,12 +34,14 @@ Below are the options available to set to your map:
 * **zoom:** Map zoom
 * **type:** Type of map - `ROADMAP`, `SATELLITE`, `HYBRID` or `TERRAIN`
 * **custom:** Any other map option not mentioned before and available for the map. For example `mapTypeControl: true`. See more map options at: https://developers.google.com/maps/documentation/javascript/controls
+* **localize:** Boolean to localize your position or not. Overrides 'latitude' & 'longitude' and 'address' (Localize have priority versus Latitude & Longitude and Address)
 * **latitude:** Default latitude if the browser doesn't support localization or you don't want localization (Latitude & Langitude have priority versus Address)
 * **longitude:** Default longitude if the browser doesn't support localization or you don't want localization (Latitude & Langitude have priority versus Address)
 * **address:** Default address if the browser doesn't support localization or you don't want localization (Latitude & Langitude have priority versus Address)
-* **localize:** Boolean to localize your position or not
 * **marker:** Boolean to put a marker in your position or not
+* **markerTitle:** Marker title (HTML title tag)
 * **markerIcon:** Default icon of the marker of your position
+* **markerShadow:** Default icon' shadow of the marker of your position
 * **infoWindow:** Boolean to show an information window when you click your position marker or not
 * **windowText:** Default text inside your position marker´s information window
 
@@ -55,12 +57,14 @@ In order modify any of the default options shown above you need to create your m
     'zoom' => 7,
     'type' => 'HYBRID',
     'custom' => null,
+    'localize' => true,
     'latitude' => 40.69847032728747,
     'longitude' => -1.9514422416687,
     'address' => '1 Infinite Loop, Cupertino',
-    'localize' => true,
     'marker' => true,
+    'markerTitle' => 'This is my position',
     'markerIcon' => 'http://google-maps-icons.googlecode.com/files/home.png',
+    'markerShadow' => 'http://google-maps-icons.googlecode.com/files/shadow.png',
     'infoWindow' => true,
     'windowText' => 'My Position'
   );
