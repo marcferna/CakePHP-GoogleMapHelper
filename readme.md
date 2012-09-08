@@ -97,7 +97,7 @@ Where:
 There are some marker options available to customize the marker popup info window:
 * **showWindow:** Boolean to show or not the popup info window
 * **windowText:** Text to show inside the popup info window
-* **markerTitle:** 
+* **markerTitle:** Marker title (HTML title tag)
 * **markerIcon:** Marker icon
 * **markerShadow:** Marker icon shadow
 
