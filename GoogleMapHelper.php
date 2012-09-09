@@ -103,6 +103,7 @@ class GoogleMapHelper extends AppHelper {
 				var markers = new Array();
 				var markersIds = new Array();
 				var geocoder = new google.maps.Geocoder();
+
 				function geocodeAddress(address, action, map,markerId, markerTitle, markerIcon, markerShadow, windowText, showInfoWindow) {
 				    geocoder.geocode( { 'address': address}, function(results, status) {
 				      if (status == google.maps.GeocoderStatus.OK) {
@@ -262,6 +263,29 @@ class GoogleMapHelper extends AppHelper {
 		
 		$marker .= "</script>";
 		return $marker;
+	}
+
+	function getDirections($map_id, $directions_id, $from, $to, $travelMode = "DRIVING"){
+		$directions = "
+			<script>
+			  var {$directions_id}Service = new google.maps.DirectionsService();
+			  var {$directions_id}Display;
+			  {$directions_id}Display = new google.maps.DirectionsRenderer();
+			  {$directions_id}Display.setMap({$map_id});
+			  var request = {
+			    origin:'{$from}',
+			    destination:'{$to}',
+			    travelMode: google.maps.TravelMode.{$travelMode}
+			  };
+			  {$directions_id}Service.route(request, function(result, status) {
+			    console.log(result);
+			    if (status == google.maps.DirectionsStatus.OK) {
+			      {$directions_id}Display.setDirections(result);
+			    }
+			  });
+			</script>
+		";
+		return $directions;
 	}
 	
 
