@@ -118,3 +118,38 @@ In order modify any of the default options shown above you need to create your m
 <?= $this->GoogleMap->addMarker("map_canvas", 1, "1 Infinite Loop, Cupertino, California", $marker_options); ?>
 
 ```
+
+## Directions
+To add a route between two points use:
+```php
+<?= $this->GoogleMap->getDirections($map_id, $id, $position); ?>
+```
+Where:
+* **$map_id** is the map canvas id ('map_canvas' by default)
+* **$id** is the unique identifiyer for that route
+* **$position** array with from and to addresses
+
+**Example:**
+```php
+<?= $this->GoogleMap->getDirections("map_canvas", "directions1", array("from" => "Lake Tahoe", "to" => "San Francisco")); ?>
+```
+
+## Directions Options
+There are some directions options available to customize:
+* **travelMode:** Travel mode (DRIVING, BICYCLING, TRANSIT, WALKING)
+* **directionsDiv:** Div ID to dump the step by step directions (The div needs to be before the getDirections() call)
+
+In order modify any of the default options shown above you need to create your marker passing the array as follows:
+```php
+
+<?
+  // Override any of the following default options to customize your route
+  $directions_options = array(
+    'travelMode' => "WALKING",
+    'directionsDiv' => 'directions',
+  );
+?>
+<div id="directions"></div>
+<?= $this->GoogleMap->getDirections("map_canvas", "directions1", array("from" => "Lake Tahoe", "to" => "San Francisco"), $directions_options); ?>
+
+```
