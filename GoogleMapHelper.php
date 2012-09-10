@@ -38,30 +38,30 @@ class GoogleMapHelper extends AppHelper {
 
 	
 	//DEFAULT MAP OPTIONS (function map())
-	var $defaultId = "map_canvas";														// Map canvas ID
-	var $defaultWidth = "800px";														// Width of the map
-	var $defaultHeight = "800px";														// Height of the map
-	var $defaultStyle = "style";														// CSS style for the map canvas
-	var $defaultZoom = 6;																// Default zoom
-	var $defaultType = 'HYBRID';														// Type of map (ROADMAP, SATELLITE, HYBRID or TERRAIN)
-	var $defaultCustom = "";															// Any other map option not mentioned before and available for the map. 
+	var $defaultId = "map_canvas";								// Map canvas ID
+	var $defaultWidth = "800px";								// Width of the map
+	var $defaultHeight = "800px";								// Height of the map
+	var $defaultStyle = "style";								// CSS style for the map canvas
+	var $defaultZoom = 6;									// Default zoom
+	var $defaultType = 'HYBRID';								// Type of map (ROADMAP, SATELLITE, HYBRID or TERRAIN)
+	var $defaultCustom = "";								// Any other map option not mentioned before and available for the map. 
 																						// For example 'mapTypeControl: true' (http://code.google.com/apis/maps/documentation/javascript/controls.html)
-	var $defaultLatitude = 40.69847032728747;											// Default latitude if the browser doesn't support localization or you don't want localization
-	var $defaultLongitude = -73.9514422416687;											// Default longitude if the browser doesn't support localization or you don't want localization
-	var $defaultLocalize = true;														// Boolean to localize your position or not
-	var $defaultMarker = true;															// Boolean to put a marker in the position or not
-	var $defaultMarkerTitle = 'My Position';											// Default marker title (HTML title tag)																		
+	var $defaultLatitude = 40.69847032728747;						// Default latitude if the browser doesn't support localization or you don't want localization
+	var $defaultLongitude = -73.9514422416687;						// Default longitude if the browser doesn't support localization or you don't want localization
+	var $defaultLocalize = true;								// Boolean to localize your position or not
+	var $defaultMarker = true;								// Boolean to put a marker in the position or not
+	var $defaultMarkerTitle = 'My Position';						// Default marker title (HTML title tag)																		
 	var $defaultMarkerIcon = 'http://google-maps-icons.googlecode.com/files/home.png'; 	// Default icon of the marker
-	var $defaultMarkerShadow = '';														// Default shadow for the marker icon
-	var $defaultInfoWindow = true;														// Boolean to show an information window when you click the marker or not
-	var $defaultWindowText = 'My Position';												// Default text inside the information window
+	var $defaultMarkerShadow = '';								// Default shadow for the marker icon
+	var $defaultInfoWindow = true;								// Boolean to show an information window when you click the marker or not
+	var $defaultWindowText = 'My Position';							// Default text inside the information window
 		
 	//DEFAULT MARKER OPTIONS (function addMarker())
-	var $defaultInfoWindowM = true;														// Boolean to show an information window when you click the marker or not
-	var $defaultWindowTextM = 'Marker info window';										// Default text inside the information window
-	var $defaultmarkerTitleM = "Title";													// Default marker title (HTML title tag)
-	var $defaultmarkerIconM = "http://maps.google.com/mapfiles/marker.png";				// Default icon of the marker
-	var $defaultmarkerShadowM = "http://maps.google.com/mapfiles/shadow50.png";			// Default shadow for the marker icon
+	var $defaultInfoWindowM = true;								// Boolean to show an information window when you click the marker or not
+	var $defaultWindowTextM = 'Marker info window';						// Default text inside the information window
+	var $defaultmarkerTitleM = "Title";							// Default marker title (HTML title tag)
+	var $defaultmarkerIconM = "http://maps.google.com/mapfiles/marker.png";			// Default icon of the marker
+	var $defaultmarkerShadowM = "http://maps.google.com/mapfiles/shadow50.png";		// Default shadow for the marker icon
 	
 	/* 
 	* Function map 
@@ -82,17 +82,17 @@ class GoogleMapHelper extends AppHelper {
 		{
 			extract($options);
 		}
-		if( !isset($id) )			$id = $this->defaultId;
+		if( !isset($id) )		$id = $this->defaultId;
 		if( !isset($width) )		$width = $this->defaultWidth;
 		if( !isset($height) )		$height = $this->defaultHeight;	
 		if( !isset($style) )		$style = $this->defaultStyle;
-		if( !isset($zoom) )			$zoom = $this->defaultZoom;			
-		if( !isset($type) )			$type = $this->defaultType;
+		if( !isset($zoom) )		$zoom = $this->defaultZoom;			
+		if( !isset($type) )		$type = $this->defaultType;
 		if( !isset($custom) )		$custom = $this->defaultCustom;		
 		if( !isset($localize) )		$localize = $this->defaultLocalize;		
 		if( !isset($marker) )		$marker = $this->defaultMarker;
 		if( !isset($markerIcon) ) 	$markerIcon = $this->defaultMarkerIcon;
-		if( !isset($markerShadow) ) $markerShadow = $this->defaultMarkerShadow;
+		if( !isset($markerShadow) )	$markerShadow = $this->defaultMarkerShadow;
 		if( !isset($markerTitle) ) 	$markerTitle = $this->defaultMarkerTitle;	
 		if( !isset($infoWindow) ) 	$infoWindow = $this->defaultInfoWindow;	
 		if( !isset($windowText) ) 	$windowText = $this->defaultWindowText;	
@@ -245,10 +245,10 @@ class GoogleMapHelper extends AppHelper {
 		}
 
 		extract($options);
-		if( !isset($infoWindow) ) 		$infoWindow = $this->defaultInfoWindowM;
-		if( !isset($windowText) ) 		$windowText = $this->defaultWindowTextM;
-		if( !isset($markerTitle) ) 		$markerTitle = $this->defaultmarkerTitleM;
-		if( !isset($markerIcon) ) 		$markerIcon = $this->defaultmarkerIconM;
+		if( !isset($infoWindow) ) 	$infoWindow = $this->defaultInfoWindowM;
+		if( !isset($windowText) ) 	$windowText = $this->defaultWindowTextM;
+		if( !isset($markerTitle) ) 	$markerTitle = $this->defaultmarkerTitleM;
+		if( !isset($markerIcon) ) 	$markerIcon = $this->defaultmarkerIconM;
 		if( !isset($markerShadow) ) 	$markerShadow = $this->defaultmarkerShadowM;
 		$marker = "<script>";
 		
