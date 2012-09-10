@@ -37,7 +37,7 @@
 class GoogleMapHelper extends AppHelper {
 
 	
-	//DEFAULT MAP OPTIONS (function map())
+	//DEFAULT MAP OPTIONS (method map())
 	var $defaultId = "map_canvas";								// Map canvas ID
 	var $defaultWidth = "800px";								// Width of the map
 	var $defaultHeight = "800px";								// Height of the map
@@ -56,12 +56,16 @@ class GoogleMapHelper extends AppHelper {
 	var $defaultInfoWindow = true;								// Boolean to show an information window when you click the marker or not
 	var $defaultWindowText = 'My Position';							// Default text inside the information window
 		
-	//DEFAULT MARKER OPTIONS (function addMarker())
+	//DEFAULT MARKER OPTIONS (method addMarker())
 	var $defaultInfoWindowM = true;								// Boolean to show an information window when you click the marker or not
 	var $defaultWindowTextM = 'Marker info window';						// Default text inside the information window
 	var $defaultmarkerTitleM = "Title";							// Default marker title (HTML title tag)
 	var $defaultmarkerIconM = "http://maps.google.com/mapfiles/marker.png";			// Default icon of the marker
 	var $defaultmarkerShadowM = "http://maps.google.com/mapfiles/shadow50.png";		// Default shadow for the marker icon
+
+	//DEFAULT DIRECTIONS OPTIONS (method getDirections())
+	var $defaultTravelMode = "DRIVING";		// Default travel mode (DRIVING, BICYCLING, TRANSIT, WALKING)
+	var $defaultDirectionsDiv = null;			// Div ID to dump the step by step directions
 	
 	/* 
 	* Method map 
