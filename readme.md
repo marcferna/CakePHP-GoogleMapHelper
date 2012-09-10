@@ -25,7 +25,7 @@ Print the map to your view
 <?= $this->GoogleMap->map(); ?>
 ```
 
-## Map Options
+### Map Options
 Below are the options available to set to your map:
 * **id:** Map canvas id
 * **width:** Map width
@@ -73,7 +73,7 @@ In order modify any of the default options shown above you need to create your m
 <?= $this->GoogleMap->map($map_options); ?>
 ```
 
-## Adding Markers
+## Markers
 To add a marker use:
 ```php
 <?= $this->GoogleMap->addMarker($map_id, $marker_id, $position); ?>
@@ -93,7 +93,7 @@ Where:
 <?= $this->GoogleMap->addMarker("map_canvas", 1, array('latitude' => 40.69847, 'longitude' => -73.9514)); ?>
 ```
 
-## Marker Options
+### Marker Options
 There are some marker options available to customize the marker popup info window:
 * **showWindow:** Boolean to show or not the popup info window
 * **windowText:** Text to show inside the popup info window
@@ -134,7 +134,7 @@ Where:
 <?= $this->GoogleMap->getDirections("map_canvas", "directions1", array("from" => "Lake Tahoe", "to" => "San Francisco")); ?>
 ```
 
-## Directions Options
+### Directions Options
 There are some directions options available to customize:
 * **travelMode:** Travel mode (DRIVING, BICYCLING, TRANSIT, WALKING)
 * **directionsDiv:** Div ID to dump the step by step directions (The div needs to be before the getDirections() call)
