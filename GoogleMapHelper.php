@@ -64,8 +64,8 @@ class GoogleMapHelper extends AppHelper {
 	var $defaultmarkerShadowM = "http://maps.google.com/mapfiles/shadow50.png";		// Default shadow for the marker icon
 
 	//DEFAULT DIRECTIONS OPTIONS (method getDirections())
-	var $defaultTravelMode = "DRIVING";		// Default travel mode (DRIVING, BICYCLING, TRANSIT, WALKING)
-	var $defaultDirectionsDiv = null;			// Div ID to dump the step by step directions
+	var $defaultTravelMode = "DRIVING";							// Default travel mode (DRIVING, BICYCLING, TRANSIT, WALKING)
+	var $defaultDirectionsDiv = null;							// Div ID to dump the step by step directions
 	
 	/* 
 	* Method map 
