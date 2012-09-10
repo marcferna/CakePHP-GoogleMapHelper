@@ -64,12 +64,11 @@ class GoogleMapHelper extends AppHelper {
 	var $defaultmarkerShadowM = "http://maps.google.com/mapfiles/shadow50.png";			// Default shadow for the marker icon
 	
 	/* 
-	* Function map 
+	* Method map 
 	* 
 	* This method generates a div tag and inserts
 	* a google maps.
 	* 
-	* Pass an array with the options listed above in order to customize it
 	* 
 	* @author Marc Fernandez <marc.fernandezg (at) gmail (dot) com> 
 	* @param array $options - options array 
@@ -216,11 +215,10 @@ class GoogleMapHelper extends AppHelper {
 	
 	
 	/* 
-	* Function addMarker 
+	* Method addMarker 
 	* 
 	* This method puts a marker in the google map generated with the method map
 	* 
-	* Pass an array with the options listed above in order to customize it
 	* 
 	* @author Marc Fernandez <marc.fernandezg (at) gmail (dot) com> 
 	* @param $map_id - Id that you used to create the map (default 'map_canvas') 
@@ -265,22 +263,52 @@ class GoogleMapHelper extends AppHelper {
 		return $marker;
 	}
 
-	function getDirections($map_id, $directions_id, $from, $to, $travelMode = "DRIVING"){
+	/* 
+	* Method getDirections 
+	* 
+	* This method gets the direction between two addresses or markers
+	* 
+	* 
+	* @author Marc Fernandez <marc.fernandezg (at) gmail (dot) com> 
+	* @param $map_id - Id that you used to create the map (default 'map_canvas') 
+	* @param $id - Unique identifier for the directions
+	* @param mixed $position - array with strings with the from and to addresses or from and to markers
+	* @param array $options - options array 
+	* @return string - will return all the javascript script to add the directions to the map
+	* 
+	*/ 
+	function getDirections($map_id, $id, $position, $options = array()){
+		if($id == null || $map_id == null || $position == null) return null;
+
+		if( !isset($position["from"]) || !isset($position["to"]) )  
+			return null;
+
+		if( $options != null )
+		{
+			extract($options);
+		}
+		if( !isset($travelMode) )			$travelMode = $this->defaultTravelMode;
+		if( !isset($directionsDiv) )	$directionsDiv = $this->defaultDirectionsDiv;
+		
 		$directions = "
 			<script>
-			  var {$directions_id}Service = new google.maps.DirectionsService();
-			  var {$directions_id}Display;
-			  {$directions_id}Display = new google.maps.DirectionsRenderer();
-			  {$directions_id}Display.setMap({$map_id});
+			  var {$id}Service = new google.maps.DirectionsService();
+			  var {$id}Display;
+			  {$id}Display = new google.maps.DirectionsRenderer();
+			  {$id}Display.setMap({$map_id});
+			";
+			if( $directionsDiv != null )
+				$directions .= "{$id}Display.setPanel(document.getElementById('{$directionsDiv}'));";
+
+			$directions .= "
 			  var request = {
-			    origin:'{$from}',
-			    destination:'{$to}',
+			    origin:'{$position["from"]}',
+			    destination:'{$position["to"]}',
 			    travelMode: google.maps.TravelMode.{$travelMode}
 			  };
-			  {$directions_id}Service.route(request, function(result, status) {
-			    console.log(result);
+			  {$id}Service.route(request, function(result, status) {
 			    if (status == google.maps.DirectionsStatus.OK) {
-			      {$directions_id}Display.setDirections(result);
+			      {$id}Display.setDirections(result);
 			    }
 			  });
 			</script>
