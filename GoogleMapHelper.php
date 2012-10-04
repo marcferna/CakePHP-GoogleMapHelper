@@ -109,12 +109,18 @@ class GoogleMapHelper extends AppHelper {
 
 				function geocodeAddress(address, action, map,markerId, markerTitle, markerIcon, markerShadow, windowText, showInfoWindow) {
 				    geocoder.geocode( { 'address': address}, function(results, status) {
+				    	console.log(results);
 				      if (status == google.maps.GeocoderStatus.OK) {
 				      	if(action =='setCenter'){
+				      		return results[0].geometry.location;
 				      		setCenterMap(results[0].geometry.location);
 				      	}
 				      	if(action =='setMarker'){
+				      		//return results[0].geometry.location;
 				      		setMarker(map,markerId,results[0].geometry.location,markerTitle, markerIcon, markerShadow,windowText, showInfoWindow);
+				      	}
+				      	if(action =='addPolyline'){
+				      		return results[0].geometry.location;
 				      	}
 				      } else {
 				        alert('Geocode was not successful for the following reason: ' + status);
@@ -147,7 +153,7 @@ class GoogleMapHelper extends AppHelper {
 			}
 		";
 		if(isset($latitude) && isset($longitude)) $map .="setCenterMap(new google.maps.LatLng({$latitude}, {$longitude}));";
-		else if(isset($address)) $map .="geocodeAddress('{$address}','setCenter') ; ";
+		else if(isset($address)) $map .="var centerLocation = geocodeAddress('{$address}','setCenter'); setCenterMap(centerLocation);";
 		else $map .="setCenterMap(new google.maps.LatLng({$this->defaultLatitude}, {$this->defaultLongitude}));";
 		$map .= "
 			function localize(){
@@ -318,6 +324,92 @@ class GoogleMapHelper extends AppHelper {
 			</script>
 		";
 		return $directions;
+	}
+
+	/* 
+	* Method addPolyline 
+	* 
+	* This method adds a line between 2 points
+	* 
+	* 
+	* @author Marc Fernandez <marc.fernandezg (at) gmail (dot) com> 
+	* @param $map_id - Id that you used to create the map (default 'map_canvas') 
+	* @param $id - Unique identifier for the directions
+	* @param mixed $position - array with strings with the from and to addresses or from and to markers
+	* @param array $options - options array 
+	* @return string - will return all the javascript script to add the directions to the map
+	* 
+	*/ 
+	function addPolyline($map_id, $id, $position, $options = array()){
+		if($id == null || $map_id == null || $position == null) return null;
+
+		if( !isset($position["start"]) || !isset($position["end"]) )  
+			return null;
+
+		$geolocation_start = false;
+		$geolocation_end = false;
+		// Check if position is array and has the two necessary elements
+		// or if is not array that the string is not empty
+		if( is_array($position["start"]) ){
+			if( !isset($position["start"]["latitude"]) || !isset($position["start"]["longitude"]) )  
+				return null;
+			$latitude_start = $position["start"]["latitude"];
+			$longitude_start = $position["start"]["longitude"];
+		}else{
+			$geolocation_start = true;
+		}
+
+		if( is_array($position["end"]) ){
+			if( !isset($position["end"]["latitude"]) || !isset($position["end"]["longitude"]) )  
+				return null;
+			$latitude_end = $position["end"]["latitude"];
+			$longitude_end = $position["end"]["longitude"];
+		}else{
+			$geolocation_end = true;
+		}
+
+		if( $options != null )
+		{
+			extract($options);
+		}
+		if( !isset($travelMode) )			$travelMode = $this->defaultTravelMode;
+		if( !isset($directionsDiv) )	$directionsDiv = $this->defaultDirectionsDiv;
+
+		$polyline = "<script>";
+
+		if(!$geolocation_start){
+			if (!preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $latitude_start) || !preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $longitude_start)) return null;
+
+			$polyline .= "var start = new google.maps.LatLng({$latitude_start}, {$longitude_start}); ";
+		}else{
+			if( empty($position["start"]) ) return null;
+			$polyline .= "var start = geocodeAddress('{$position["start"]}', 'addPolyline', {$map_id},'{$id}','{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false').")";
+		}
+
+		if(!$geolocation_end){
+			if (!preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $latitude_end) || !preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $longitude_end)) return null;
+
+			$polyline .= "var end = new google.maps.LatLng({$latitude_end}, {$longitude_end}); ";
+		}else{
+			if( empty($position["end"]) ) return null;
+			$polyline .= "var end = geocodeAddress('{$position["end"]}', 'addPolyline', {$map_id},'{$id}','','','','', false);";
+		}
+
+		$polyline .= "
+				var poly = [
+			    start,
+			    end
+			  ];
+			  var {$id}Polyline = new google.maps.Polyline({
+			    path: poly,
+			    strokeColor: '#FF0000',
+			    strokeOpacity: 1.0,
+			    strokeWeight: 2
+			  });
+			  {$id}Polyline.setMap({$map_id});
+			</script>
+			";
+		return $polyline;
 	}
 	
 
