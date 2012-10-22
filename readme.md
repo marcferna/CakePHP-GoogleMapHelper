@@ -165,7 +165,8 @@ Where:
 * **$position** array with start and end coordinates (geolocation not suppoerted yet)
 
 **Example:**
-```php<?= $this->GoogleMap->addPolyline("map_canvas", "polyline", array("start" => array("latitude" =>37.772323 ,"longitude"=> -122.214897), "end" => array("latitude" =>21.291982 ,"longitude"=> -157.821856))); ?>
+```php
+<?= $this->GoogleMap->addPolyline("map_canvas", "polyline", array("start" => array("latitude" =>37.772323 ,"longitude"=> -122.214897), "end" => array("latitude" =>21.291982 ,"longitude"=> -157.821856))); ?>
 ```
 
 ### Polylines Options
