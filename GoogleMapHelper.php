@@ -2,7 +2,7 @@
 /*
   CakePHP Google Map V3 - Helper to CakePHP framework that integrates a Google Map in your view
   using Google Maps API V3.
-  
+
 	Copyright (c) 2012 Marc Fernandez Girones: marc.fernandezg@gmail.com
 
 	MIT LICENSE:
@@ -12,10 +12,10 @@
 	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 	copies of the Software, and to permit persons to whom the Software is
 	furnished to do so, subject to the following conditions:
-	
+
 	The above copyright notice and this permission notice shall be included in
 	all copies or substantial portions of the Software.
-	
+
 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,11 +23,11 @@
 	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 	THE SOFTWARE.
-   
+
 	@author      Marc Fernandez Girones <marc.fernandezg@gmail.com>
 	@version     3.0
 	@license     OPPL
-	 
+
 	Date	     May 13, 2010
 
   This helper uses the latest Google API V3 so you don't need to provide or get any Google API Key
@@ -36,7 +36,7 @@
 
 class GoogleMapHelper extends AppHelper {
 
-	
+
 	//DEFAULT MAP OPTIONS (method map())
 	var $defaultId = "map_canvas";								// Map canvas ID
 	var $defaultWidth = "800px";								// Width of the map
@@ -44,18 +44,18 @@ class GoogleMapHelper extends AppHelper {
 	var $defaultStyle = "style";								// CSS style for the map canvas
 	var $defaultZoom = 6;									// Default zoom
 	var $defaultType = 'HYBRID';								// Type of map (ROADMAP, SATELLITE, HYBRID or TERRAIN)
-	var $defaultCustom = "";								// Any other map option not mentioned before and available for the map. 
+	var $defaultCustom = "";								// Any other map option not mentioned before and available for the map.
 																						// For example 'mapTypeControl: true' (http://code.google.com/apis/maps/documentation/javascript/controls.html)
 	var $defaultLatitude = 40.69847032728747;						// Default latitude if the browser doesn't support localization or you don't want localization
 	var $defaultLongitude = -73.9514422416687;						// Default longitude if the browser doesn't support localization or you don't want localization
 	var $defaultLocalize = true;								// Boolean to localize your position or not
 	var $defaultMarker = true;								// Boolean to put a marker in the position or not
-	var $defaultMarkerTitle = 'My Position';						// Default marker title (HTML title tag)																		
+	var $defaultMarkerTitle = 'My Position';						// Default marker title (HTML title tag)
 	var $defaultMarkerIcon = 'http://google-maps-icons.googlecode.com/files/home.png'; 	// Default icon of the marker
 	var $defaultMarkerShadow = '';								// Default shadow for the marker icon
 	var $defaultInfoWindow = true;								// Boolean to show an information window when you click the marker or not
 	var $defaultWindowText = 'My Position';							// Default text inside the information window
-		
+
 	//DEFAULT MARKER OPTIONS (method addMarker())
 	var $defaultInfoWindowM = true;								// Boolean to show an information window when you click the marker or not
 	var $defaultWindowTextM = 'Marker info window';						// Default text inside the information window
@@ -66,19 +66,24 @@ class GoogleMapHelper extends AppHelper {
 	//DEFAULT DIRECTIONS OPTIONS (method getDirections())
 	var $defaultTravelMode = "DRIVING";							// Default travel mode (DRIVING, BICYCLING, TRANSIT, WALKING)
 	var $defaultDirectionsDiv = null;							// Div ID to dump the step by step directions
-	
-	/* 
-	* Method map 
-	* 
+
+	//DEFAULT POLYLINES OPTION (method addPolyline())
+	var $defaultStrokeColor = "#FF0000";					// Line color
+	var $defaultStrokeOpacity = 1.0;							// Line opacity 0.1 - 1
+	var $defaultStrokeWeight = 2;									// Line Weight in pixels
+
+	/*
+	* Method map
+	*
 	* This method generates a div tag and inserts
 	* a google maps.
-	* 
-	* 
-	* @author Marc Fernandez <marc.fernandezg (at) gmail (dot) com> 
-	* @param array $options - options array 
+	*
+	*
+	* @author Marc Fernandez <marc.fernandezg (at) gmail (dot) com>
+	* @param array $options - options array
 	* @return string - will return all the javascript script to generate the map
-	* 
-	*/	
+	*
+	*/
 	public function map($options = null)
 	{
 		if( $options != null )
@@ -87,18 +92,18 @@ class GoogleMapHelper extends AppHelper {
 		}
 		if( !isset($id) )		$id = $this->defaultId;
 		if( !isset($width) )		$width = $this->defaultWidth;
-		if( !isset($height) )		$height = $this->defaultHeight;	
+		if( !isset($height) )		$height = $this->defaultHeight;
 		if( !isset($style) )		$style = $this->defaultStyle;
-		if( !isset($zoom) )		$zoom = $this->defaultZoom;			
+		if( !isset($zoom) )		$zoom = $this->defaultZoom;
 		if( !isset($type) )		$type = $this->defaultType;
-		if( !isset($custom) )		$custom = $this->defaultCustom;		
-		if( !isset($localize) )		$localize = $this->defaultLocalize;		
+		if( !isset($custom) )		$custom = $this->defaultCustom;
+		if( !isset($localize) )		$localize = $this->defaultLocalize;
 		if( !isset($marker) )		$marker = $this->defaultMarker;
 		if( !isset($markerIcon) ) 	$markerIcon = $this->defaultMarkerIcon;
 		if( !isset($markerShadow) )	$markerShadow = $this->defaultMarkerShadow;
-		if( !isset($markerTitle) ) 	$markerTitle = $this->defaultMarkerTitle;	
-		if( !isset($infoWindow) ) 	$infoWindow = $this->defaultInfoWindow;	
-		if( !isset($windowText) ) 	$windowText = $this->defaultWindowText;	
+		if( !isset($markerTitle) ) 	$markerTitle = $this->defaultMarkerTitle;
+		if( !isset($infoWindow) ) 	$infoWindow = $this->defaultInfoWindow;
+		if( !isset($windowText) ) 	$windowText = $this->defaultWindowText;
 
 		$map = "<div id='$id' style='width:$width; height:$height; $style'></div>";
 		$map .="
@@ -128,7 +133,7 @@ class GoogleMapHelper extends AppHelper {
 				      }
 				    });
 				}";
-		
+
 		$map .= "
 			var initialLocation;
 		    var browserSupportFlag =  new Boolean();
@@ -137,14 +142,14 @@ class GoogleMapHelper extends AppHelper {
 		      zoom: {$zoom},
 		      mapTypeId: google.maps.MapTypeId.{$type}
 		      ".(($custom != "")? ",$custom" : "")."
-		      
+
 		    };
 		    {$id} = new google.maps.Map(document.getElementById('$id'), myOptions);
 		";
 		$map.="
 			function setCenterMap(position){
 		";
-		if($localize) $map .= "localize();"; 
+		if($localize) $map .= "localize();";
 		else {
 			$map .= "{$id}.setCenter(position);";
 			if($marker) $map .= "setMarker({$id},'center',position,'{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false').");";
@@ -163,19 +168,19 @@ class GoogleMapHelper extends AppHelper {
 		              initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
 		              {$id}.setCenter(initialLocation);";
 					  if($marker) $map .= "setMarker({$id},'center',initialLocation,'{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false').");";
-		                       
+
 		            $map .= "}, function() {
 		              handleNoGeolocation(browserSupportFlag);
 		            });
-		            
+
 		        } else if (google.gears) { // Try Google Gears Geolocation
 					browserSupportFlag = true;
 					var geo = google.gears.factory.create('beta.geolocation');
 					geo.getCurrentPosition(function(position) {
 						initialLocation = new google.maps.LatLng(position.latitude,position.longitude);
 						{$id}.setCenter(initialLocation);";
-					  	if($marker) $map .= "setMarker({$id},'center',initialLocation,'{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false').");";         
-		        
+					  	if($marker) $map .= "setMarker({$id},'center',initialLocation,'{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false').");";
+
 		            $map .= "}, function() {
 		              handleNoGeolocation(browserSupportFlag);
 		            });
@@ -185,7 +190,7 @@ class GoogleMapHelper extends AppHelper {
 		            handleNoGeolocation(browserSupportFlag);
 		        }
 		    }
-		    
+
 		    function handleNoGeolocation(errorFlag) {
 		        if (errorFlag == true) {
 		          initialLocation = noLocation;
@@ -222,29 +227,29 @@ class GoogleMapHelper extends AppHelper {
 		$map .= "</script>";
 		return $map;
 	}
-	
-	
-	/* 
-	* Method addMarker 
-	* 
+
+
+	/*
+	* Method addMarker
+	*
 	* This method puts a marker in the google map generated with the method map
-	* 
-	* 
-	* @author Marc Fernandez <marc.fernandezg (at) gmail (dot) com> 
-	* @param $map_id - Id that you used to create the map (default 'map_canvas') 
+	*
+	*
+	* @author Marc Fernandez <marc.fernandezg (at) gmail (dot) com>
+	* @param $map_id - Id that you used to create the map (default 'map_canvas')
 	* @param $id - Unique identifier for the marker
 	* @param mixed $position - string with the address or an array with latitude and longitude
-	* @param array $options - options array 
+	* @param array $options - options array
 	* @return string - will return all the javascript script to add the marker to the map
-	* 
-	*/ 
+	*
+	*/
 	function addMarker($map_id, $id, $position, $options = array()){
 		if($id == null || $map_id == null || $position == null) return null;
 		$geolocation = false;
 		// Check if position is array and has the two necessary elements
 		// or if is not array that the string is not empty
 		if( is_array($position) ){
-			if( !isset($position["latitude"]) || !isset($position["longitude"]) )  
+			if( !isset($position["latitude"]) || !isset($position["longitude"]) )
 				return null;
 			$latitude = $position["latitude"];
 			$longitude = $position["longitude"];
@@ -259,7 +264,7 @@ class GoogleMapHelper extends AppHelper {
 		if( !isset($markerIcon) ) 	$markerIcon = $this->defaultmarkerIconM;
 		if( !isset($markerShadow) ) 	$markerShadow = $this->defaultmarkerShadowM;
 		$marker = "<script>";
-		
+
 		if(!$geolocation){
 			if (!preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $latitude) || !preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $longitude)) return null;
 
@@ -268,29 +273,29 @@ class GoogleMapHelper extends AppHelper {
 			if( empty($position) ) return null;
 			$marker .= "geocodeAddress('{$position}', 'setMarker', {$map_id},'{$id}','{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false').")";
 		}
-		
+
 		$marker .= "</script>";
 		return $marker;
 	}
 
-	/* 
-	* Method getDirections 
-	* 
+	/*
+	* Method getDirections
+	*
 	* This method gets the direction between two addresses or markers
-	* 
-	* 
-	* @author Marc Fernandez <marc.fernandezg (at) gmail (dot) com> 
-	* @param $map_id - Id that you used to create the map (default 'map_canvas') 
+	*
+	*
+	* @author Marc Fernandez <marc.fernandezg (at) gmail (dot) com>
+	* @param $map_id - Id that you used to create the map (default 'map_canvas')
 	* @param $id - Unique identifier for the directions
 	* @param mixed $position - array with strings with the from and to addresses or from and to markers
-	* @param array $options - options array 
+	* @param array $options - options array
 	* @return string - will return all the javascript script to add the directions to the map
-	* 
-	*/ 
+	*
+	*/
 	function getDirections($map_id, $id, $position, $options = array()){
 		if($id == null || $map_id == null || $position == null) return null;
 
-		if( !isset($position["from"]) || !isset($position["to"]) )  
+		if( !isset($position["from"]) || !isset($position["to"]) )
 			return null;
 
 		if( $options != null )
@@ -299,7 +304,7 @@ class GoogleMapHelper extends AppHelper {
 		}
 		if( !isset($travelMode) )			$travelMode = $this->defaultTravelMode;
 		if( !isset($directionsDiv) )	$directionsDiv = $this->defaultDirectionsDiv;
-		
+
 		$directions = "
 			<script>
 			  var {$id}Service = new google.maps.DirectionsService();
@@ -326,46 +331,47 @@ class GoogleMapHelper extends AppHelper {
 		return $directions;
 	}
 
-	/* 
-	* Method addPolyline 
-	* 
+	/*
+	* Method addPolyline
+	*
 	* This method adds a line between 2 points
-	* 
-	* 
-	* @author Marc Fernandez <marc.fernandezg (at) gmail (dot) com> 
-	* @param $map_id - Id that you used to create the map (default 'map_canvas') 
+	*
+	*
+	* @author Marc Fernandez <marc.fernandezg (at) gmail (dot) com>
+	* @param $map_id - Id that you used to create the map (default 'map_canvas')
 	* @param $id - Unique identifier for the directions
-	* @param mixed $position - array with strings with the from and to addresses or from and to markers
-	* @param array $options - options array 
+	* @param mixed $position - array with start and end latitudes and longitudes
+	* @param array $options - options array
 	* @return string - will return all the javascript script to add the directions to the map
-	* 
-	*/ 
+	*
+	*/
 	function addPolyline($map_id, $id, $position, $options = array()){
 		if($id == null || $map_id == null || $position == null) return null;
 
-		if( !isset($position["start"]) || !isset($position["end"]) )  
+		if( !isset($position["start"]) || !isset($position["end"]) )
 			return null;
 
-		$geolocation_start = false;
-		$geolocation_end = false;
+		if( $options != null )
+		{
+			extract($options);
+		}
+		if( !isset($strokeColor) )		$strokeColor = $this->defaultStrokeColor;
+		if( !isset($strokeOpacity) )	$strokeOpacity = $this->defaultStrokeOpacity;
+		if( !isset($strokeWeight) )		$strokeWeight = $this->defaultStrokeWeight;
+
 		// Check if position is array and has the two necessary elements
-		// or if is not array that the string is not empty
 		if( is_array($position["start"]) ){
-			if( !isset($position["start"]["latitude"]) || !isset($position["start"]["longitude"]) )  
+			if( !isset($position["start"]["latitude"]) || !isset($position["start"]["longitude"]) )
 				return null;
 			$latitude_start = $position["start"]["latitude"];
 			$longitude_start = $position["start"]["longitude"];
-		}else{
-			$geolocation_start = true;
 		}
 
 		if( is_array($position["end"]) ){
-			if( !isset($position["end"]["latitude"]) || !isset($position["end"]["longitude"]) )  
+			if( !isset($position["end"]["latitude"]) || !isset($position["end"]["longitude"]) )
 				return null;
 			$latitude_end = $position["end"]["latitude"];
 			$longitude_end = $position["end"]["longitude"];
-		}else{
-			$geolocation_end = true;
 		}
 
 		if( $options != null )
@@ -377,23 +383,13 @@ class GoogleMapHelper extends AppHelper {
 
 		$polyline = "<script>";
 
-		if(!$geolocation_start){
-			if (!preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $latitude_start) || !preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $longitude_start)) return null;
 
-			$polyline .= "var start = new google.maps.LatLng({$latitude_start}, {$longitude_start}); ";
-		}else{
-			if( empty($position["start"]) ) return null;
-			$polyline .= "var start = geocodeAddress('{$position["start"]}', 'addPolyline', {$map_id},'{$id}','{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false').")";
-		}
+		if (!preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $latitude_start) || !preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $longitude_start)) return null;
+		$polyline .= "var start = new google.maps.LatLng({$latitude_start}, {$longitude_start}); ";
 
-		if(!$geolocation_end){
-			if (!preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $latitude_end) || !preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $longitude_end)) return null;
+		if (!preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $latitude_end) || !preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $longitude_end)) return null;
 
-			$polyline .= "var end = new google.maps.LatLng({$latitude_end}, {$longitude_end}); ";
-		}else{
-			if( empty($position["end"]) ) return null;
-			$polyline .= "var end = geocodeAddress('{$position["end"]}', 'addPolyline', {$map_id},'{$id}','','','','', false);";
-		}
+		$polyline .= "var end = new google.maps.LatLng({$latitude_end}, {$longitude_end}); ";
 
 		$polyline .= "
 				var poly = [
@@ -402,16 +398,17 @@ class GoogleMapHelper extends AppHelper {
 			  ];
 			  var {$id}Polyline = new google.maps.Polyline({
 			    path: poly,
-			    strokeColor: '#FF0000',
-			    strokeOpacity: 1.0,
-			    strokeWeight: 2
+			    strokeColor: '{$strokeColor}',
+			    strokeOpacity: {$strokeOpacity},
+			    strokeWeight: {$strokeWeight}
 			  });
 			  {$id}Polyline.setMap({$map_id});
+
 			</script>
 			";
 		return $polyline;
 	}
-	
+
 
 }
 ?>

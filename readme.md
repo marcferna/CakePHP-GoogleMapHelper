@@ -50,8 +50,8 @@ In order modify any of the default options shown above you need to create your m
 <?
   // Override any of the following default options to customize your map
   $map_options = array(
-    'id' => 'map_canvas',        
-    'width' => '800px', 
+    'id' => 'map_canvas',
+    'width' => '800px',
     'height' => '800px',
     'style' => '',
     'zoom' => 7,
@@ -139,7 +139,7 @@ There are some directions options available to customize:
 * **travelMode:** Travel mode (DRIVING, BICYCLING, TRANSIT, WALKING)
 * **directionsDiv:** Div ID to dump the step by step directions (The div needs to be before the getDirections() call)
 
-In order modify any of the default options shown above you need to create your marker passing the array as follows:
+In order modify any of the default options shown above you need pass the array as follows:
 ```php
 
 <?
@@ -151,5 +151,40 @@ In order modify any of the default options shown above you need to create your m
 ?>
 <div id="directions"></div>
 <?= $this->GoogleMap->getDirections("map_canvas", "directions1", array("from" => "Lake Tahoe", "to" => "San Francisco"), $directions_options); ?>
+
+```
+
+## Polylines
+To draw a line between to points use:
+```php
+<?= $this->GoogleMap->addPolyline($map_id, $id, $position); ?>
+```
+Where:
+* **$map_id** is the map canvas id ('map_canvas' by default)
+* **$id** is the unique identifiyer for that polyline
+* **$position** array with start and end coordinates (geolocation not suppoerted yet)
+
+**Example:**
+```php<?= $this->GoogleMap->addPolyline("map_canvas", "polyline", array("start" => array("latitude" =>37.772323 ,"longitude"=> -122.214897), "end" => array("latitude" =>21.291982 ,"longitude"=> -157.821856))); ?>
+```
+
+### Polylines Options
+There are some drawing options available to customize:
+* **strokeColor:** Specifies a hexadecimal HTML color of the format "#FFFFFF". The Polyline class does not support named colors.
+* **strokeOpacity:** Specifies a numerical fractional value between 0.0 and 1.0.
+* **strokeWeight:** Specifies the weight of the line's stroke in pixels.
+
+In order modify any of the default options shown above you need to create your polyline passing the array as follows:
+```php
+
+<?
+  // Override any of the following default options to customize your polyline
+  $options = array(
+    "strokeColor" => "#FFFFFF",
+    "strokeOpacity" => 1,
+    "strokeWeight" => 8
+  );
+?>
+<?= $this->GoogleMap->addPolyline("map_canvas", "polyline", array("start" => array("latitude" => 37.772323 ,"longitude" => -122.214897), "end" => array("latitude" => 21.291982 , "longitude" => -157.821856)), $options); ?>
 
 ```
