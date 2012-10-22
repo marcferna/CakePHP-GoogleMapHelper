@@ -114,7 +114,6 @@ class GoogleMapHelper extends AppHelper {
 
 				function geocodeAddress(address, action, map,markerId, markerTitle, markerIcon, markerShadow, windowText, showInfoWindow) {
 				    geocoder.geocode( { 'address': address}, function(results, status) {
-				    	console.log(results);
 				      if (status == google.maps.GeocoderStatus.OK) {
 				      	if(action =='setCenter'){
 				      		return results[0].geometry.location;
