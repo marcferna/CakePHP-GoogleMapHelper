@@ -150,6 +150,7 @@ class GoogleMapHelper extends AppHelper {
 		if($localize) $map .= "localize();";
 		else {
 			$map .= "{$id}.setCenter(position);";
+			if (!preg_match('/^https?:\/\//', $markerIcon)) $markerIcon = $this->webroot . IMAGES_URL . '/' . $markerIcon;
 			if($marker) $map .= "setMarker({$id},'center',position,'{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false').");";
 		}
 		$map .="
@@ -165,6 +166,7 @@ class GoogleMapHelper extends AppHelper {
 		            navigator.geolocation.getCurrentPosition(function(position) {
 		              initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
 		              {$id}.setCenter(initialLocation);";
+		              if (!preg_match('/^https?:\/\//', $markerIcon)) $markerIcon = $this->webroot . IMAGES_URL . '/' . $markerIcon;
 					  if($marker) $map .= "setMarker({$id},'center',initialLocation,'{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false').");";
 
 		            $map .= "}, function() {
@@ -265,10 +267,11 @@ class GoogleMapHelper extends AppHelper {
 
 		if(!$geolocation){
 			if (!preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $latitude) || !preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $longitude)) return null;
-
+			if (!preg_match('/^https?:\/\//', $markerIcon)) $markerIcon = $this->webroot . IMAGES_URL . '/' . $markerIcon;
 			$marker .= "setMarker({$map_id},'{$id}',new google.maps.LatLng($latitude, $longitude),'{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false').")";
 		}else{
 			if( empty($position) ) return null;
+			if (!preg_match('/^https?:\/\//', $markerIcon)) $markerIcon = $this->webroot . IMAGES_URL . '/' . $markerIcon;
 			$marker .= "geocodeAddress('{$position}', 'setMarker', {$map_id},'{$id}','{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false').")";
 		}
 
