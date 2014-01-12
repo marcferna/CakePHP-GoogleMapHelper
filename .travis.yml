@@ -1,0 +1,9 @@
+language: php
+php:
+  - 5.5
+  - 5.4
+
+script: phpunit --bootstrap tests/Autoloader.php tests/GoogleMapHelperTest.php
+
+notifications:
+  email: false
