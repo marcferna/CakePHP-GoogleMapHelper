@@ -87,3 +87,18 @@
     'directions_with_options'
 )); ?>
 <br/>
+
+<h3>Polylines Examples</h3>
+<?php
+  echo $this->Html->link("Default polyline", array(
+    'controller' => 'pages',
+    'action' => 'display',
+    'default_polyline'
+)); ?>
+<br/>
+<?php
+  echo $this->Html->link("Polyline with options", array(
+    'controller' => 'pages',
+    'action' => 'display',
+    'polyline_with_options'
+)); ?>
