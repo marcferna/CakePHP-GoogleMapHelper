@@ -36,6 +36,12 @@
 
 class GoogleMapHelper extends AppHelper {
 
+  private static $version = '0.1.0';
+
+  public static function getVersion(){
+    return self::$version;
+  }
+
 
   //DEFAULT MAP OPTIONS (method map())
   // Map canvas ID

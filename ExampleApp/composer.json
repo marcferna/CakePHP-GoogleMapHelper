@@ -1,0 +1,20 @@
+{
+  "require": {
+    "markstory/cakephp_geshi": "*"
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/markstory/cakephp_geshi"
+    }
+  ],
+  "minimum-stability": "dev",
+  "config": {
+    "vendor-dir": "vendors"
+  },
+  "extra": {
+    "installer-paths": {
+      "app/Plugin/Geshi": ["markstory/cakephp_geshi"]
+    }
+  }
+}

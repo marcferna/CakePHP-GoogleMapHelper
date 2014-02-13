@@ -1,0 +1,147 @@
+/* @override http://localhost/mark_story2/site/css/geshi.css */
+/**
+ * GeSHi CSS Inspired by TextMate
+ * Theme Vibrant Ink
+ *
+ * Copyright 2008 Mark Story
+ *
+ * This work is licensed under the Creative Commons Attribution-Share Alike 2.5 Canada License.
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/2.5/ca/
+ * or send a letter to Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.
+ *
+ * @copyright		Copyright 2008, Mark Story.
+ * @link			http://mark-story.com
+ * @license			http://creativecommons.org/licenses/by-sa/2.5/ca/
+ */
+
+/*
+* Global geshi styles
+**********************/
+pre {
+	line-height: 1.5em;
+	font-size: 10px;
+	white-space: normal;
+	padding: 0;
+	background: #000;
+	border: 1px solid #222;
+}
+pre ol {
+	list-style: decimal;
+	list-style-position: outside;
+	padding: 0;
+	margin: 0;
+}
+pre ol li {
+	margin: 0 0 0 35px;
+	padding: 0;
+	color: #fff;
+	clear: none;
+}
+pre ol li div {
+	color:#F26100;
+}
+
+/* Line highlights */
+.li1 {
+	background: #030303;
+}
+
+
+/* comments */
+.co1,
+.coMULTI {
+	color:#7830CC;
+}
+/* methods */
+.me1{
+	color:#fff;
+}
+.me0 {
+
+}
+.me2 {
+	color:#000;
+}
+
+/* brackets */
+.br0 {
+	color:#fff;
+}
+
+/* strings */
+.st0 {
+	color:#52F700;
+}
+
+/* keywords */
+.kw1 {
+	color: #C6C765;
+}
+.kw2 {
+	color:#FFC500;
+}
+
+.kw3 {
+	color:#505e80;
+}
+
+/* numbers */
+.nu0 {
+	color:#319994;
+}
+
+/* vars */
+.re0 {
+	color:#fff;
+}
+
+
+/*
+* CSS selectors
+*****************/
+/* classnames */
+
+[lang=css] .kw2,
+.css .kw2 {
+	color:#fff;
+}
+[lang=css] .kw1,
+.css .kw1 {
+	color:#999966;
+}
+[lang=css] .re0,
+.css .re0 {
+	color: #F26100;
+}
+.re1 {
+	color: #96703D;
+}
+/* px values */
+[lang=css] .re3,
+.css .re3 {
+	color:#fff;
+}
+
+/*
+* Python
+****************/
+[lang=python] ol li div,
+.python ol li div {
+	color: #fff;
+}
+[lang=python] .kw1,
+.python .kw1 {
+	color:#F26100;
+}
+
+/*
+* Javascript
+****************/
+[lang=javascript] .me1,
+.javascript .me1 {
+	color:#fff;
+}
+pre[lang=javascript] ol li div,
+.javascript ol li div {
+	color: #fff;
+}
