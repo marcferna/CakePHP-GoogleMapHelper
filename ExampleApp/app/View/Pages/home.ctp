@@ -71,4 +71,19 @@
     'action' => 'display',
     'marker_with_options'
 )); ?>
+
+<h3>Directions Examples</h3>
+<?php
+  echo $this->Html->link("Default directions", array(
+    'controller' => 'pages',
+    'action' => 'display',
+    'default_directions'
+)); ?>
+<br/>
+<?php
+  echo $this->Html->link("Directions with options", array(
+    'controller' => 'pages',
+    'action' => 'display',
+    'directions_with_options'
+)); ?>
 <br/>
