@@ -18,7 +18,16 @@
  */
 ?>
 
-<h2><?php echo "GoogleMapHelper " . GoogleMapHelper::getVersion(); ?></h2>
+<h2>
+  <?php echo "GoogleMapHelper " . GoogleMapHelper::getVersion(); ?>
+  <?php
+    echo $this->Html->link(
+      $this->Html->image('GitHub-Mark-32px.png'),
+      "https://github.com/marcferna/CakePHP-GoogleMapHelper",
+      array('escape' => false)
+    );
+   ?>
+ </h2>
 <h3>Map Examples</h3>
 <?php
   echo $this->Html->link("Default map", array(
@@ -47,3 +56,19 @@
     'action' => 'display',
     'multiple_maps'
 )); ?>
+
+<h3>Markers Examples</h3>
+<?php
+  echo $this->Html->link("Default marker", array(
+    'controller' => 'pages',
+    'action' => 'display',
+    'default_marker'
+)); ?>
+<br/>
+<?php
+  echo $this->Html->link("Marker with options", array(
+    'controller' => 'pages',
+    'action' => 'display',
+    'marker_with_options'
+)); ?>
+<br/>

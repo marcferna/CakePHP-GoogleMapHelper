@@ -4,22 +4,21 @@
 <?php
   $map_options = [
     'id'         => 'map_canvas',
-    'width'      => '300px',
-    'height'     => '300px',
-    'zoom'       => 16,
-    'type'       => 'SATELLITE',
-    'custom'     => 'mapTypeControl: false, disableDefaultUI: true',
+    'width'      => '500px',
+    'height'     => '500px',
     'localize'   => false,
-    'address'    => 'Camp Nou, Barcelona',
+    'zoom'       => 10,
+    'address'    => 'Manhattan, NY',
     'marker'     => true,
-    'markerIcon' => 'soccerfield.png',
-    'infoWindow' => false
+    'infoWindow' => true
   ];
 ?>
 
 <div style="float:left;">
   <?= $this->GoogleMap->map($map_options); ?>
 </div>
+<?= $this->GoogleMap->addMarker("map_canvas", 1, array('latitude' => 40.69847, 'longitude' => -73.9514)); ?>
+<?= $this->GoogleMap->addMarker("map_canvas", 2, "Queens, NY"); ?>
 
 <?php
   $text = '
@@ -30,22 +29,25 @@
     <?php
       $map_options = [
         "id"         => "map_canvas",
-        "width"      => "300px",
-        "height"     => "300px",
-        "zoom"       => 16,
-        "type"       => "SATELLITE",
-        "custom"     => "mapTypeControl: false, disableDefaultUI: true",
+        "width"      => "500px",
+        "height"     => "500px",
         "localize"   => false,
-        "address"    => "Camp Nou, Barcelona",
+        "zoom"       => 10,
+        "address"    => "Manhattan, NY",
         "marker"     => true,
-        "markerIcon" => "soccerfield.png",
-        "infoWindow" => false
+        "infoWindow" => true
       ];
     ?>
 
     // print the default map
     <?= $this->GoogleMap->map($map_options); ?>
-';
+
+    // add the marker with latitude and longitude
+    <?= $this->GoogleMap->addMarker("map_canvas", 1, array("latitude" => 40.69847, "longitude" => -73.9514)); ?>
+
+    // add the marker with address
+    <?= $this->GoogleMap->addMarker("map_canvas", 2, "Queens, NY"); ?>
+'   ;
 ?>
 <div style="float:left; margin-left: 20px">
 Code:
