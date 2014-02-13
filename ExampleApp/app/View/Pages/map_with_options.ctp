@@ -3,7 +3,7 @@
 <?= $this->Html->script('http://maps.google.com/maps/api/js?sensor=false', false); ?>
 
 <?php
-  $map_options = [
+  $map_options = array(
     'id'           => 'map_canvas',
     'width'        => '800px',
     'height'       => '800px',
@@ -17,7 +17,7 @@
     'markerShadow' => 'http://google-maps-icons.googlecode.com/files/shadow.png',
     'infoWindow'   => true,
     'windowText'   => 'My Position custom text'
-  ];
+  );
 ?>
 
 <div style="float:left;">
@@ -31,7 +31,7 @@
     <?= $this->Html->script("http://maps.google.com/maps/api/js?sensor=false", false); ?>
 
     <?php
-      $map_options = [
+      $map_options = array(
         "id"           => "map_canvas",
         "width"        => "800px",
         "height"       => "800px",
@@ -45,7 +45,7 @@
         "markerShadow" => "http://google-maps-icons.googlecode.com/files/shadow.png",
         "infoWindow"   => true,
         "windowText"   => "My Position custom text"
-      ];
+      );
     ?>
 
     // print the default map

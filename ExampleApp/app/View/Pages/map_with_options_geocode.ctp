@@ -4,7 +4,7 @@
 <?= $this->Html->script('http://maps.google.com/maps/api/js?sensor=false', false); ?>
 
 <?php
-  $map_options = [
+  $map_options = array(
     'id'         => 'map_canvas',
     'width'      => '300px',
     'height'     => '300px',
@@ -16,7 +16,7 @@
     'marker'     => true,
     'markerIcon' => 'soccerfield.png',
     'infoWindow' => false
-  ];
+  );
 ?>
 
 <div style="float:left;">
@@ -30,7 +30,7 @@
     <?= $this->Html->script("http://maps.google.com/maps/api/js?sensor=false", false); ?>
 
     <?php
-      $map_options = [
+      $map_options = array(
         "id"         => "map_canvas",
         "width"      => "300px",
         "height"     => "300px",
@@ -42,7 +42,7 @@
         "marker"     => true,
         "markerIcon" => "soccerfield.png",
         "infoWindow" => false
-      ];
+      );
     ?>
 
     // print the default map
