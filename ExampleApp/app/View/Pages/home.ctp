@@ -57,6 +57,7 @@
     'multiple_maps'
 )); ?>
 
+<br/><br/>
 <h3>Markers Examples</h3>
 <?php
   echo $this->Html->link("Default marker", array(
@@ -72,6 +73,7 @@
     'marker_with_options'
 )); ?>
 
+<br/><br/>
 <h3>Directions Examples</h3>
 <?php
   echo $this->Html->link("Default directions", array(
@@ -86,8 +88,8 @@
     'action' => 'display',
     'directions_with_options'
 )); ?>
-<br/>
 
+<br/><br/>
 <h3>Polylines Examples</h3>
 <?php
   echo $this->Html->link("Default polyline", array(
