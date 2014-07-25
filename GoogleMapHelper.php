@@ -336,6 +336,16 @@ class GoogleMapHelper extends AppHelper {
     if( !isset($travelMode) )      $travelMode = $this->defaultTravelMode;
     if( !isset($directionsDiv) )  $directionsDiv = $this->defaultDirectionsDiv;
 
+    if( is_array($position["from"]) )
+      $position["from"] = "new google.maps.LatLng({$position["from"]["latitude"]}, {$position["from"]["longitude"]})";
+    else
+      $position["from"] = "'{$position["from"]}'";
+
+    if( is_array($position["to"]) )
+      $position["to"] = "new google.maps.LatLng({$position["to"]["latitude"]}, {$position["to"]["longitude"]})";
+    else
+      $position["to"] = "'{$position["to"]}'";
+
     $directions = "
       <script>
         var {$id}Service = new google.maps.DirectionsService();
@@ -348,8 +358,8 @@ class GoogleMapHelper extends AppHelper {
 
       $directions .= "
         var request = {
-          origin:'{$position["from"]}',
-          destination:'{$position["to"]}',
+          origin:{$position["from"]},
+          destination:{$position["to"]},
           travelMode: google.maps.TravelMode.{$travelMode}
         };
         {$id}Service.route(request, function(result, status) {
