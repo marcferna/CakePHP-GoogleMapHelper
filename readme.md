@@ -1,8 +1,8 @@
 # Google Maps for CakePHP 2.x [![Build Status](https://travis-ci.org/marcferna/CakePHP-GoogleMapHelper.png?branch=master)](https://travis-ci.org/marcferna/CakePHP-GoogleMapHelper)
 Helper for CakePHP framework that integrates a Google Map in your view using Google Maps API V3.
 
-## Demo
-See all the examples live [here](http://googlemap-examples.herokuapp.com/)
+##[Demo](http://googlemap-examples.herokuapp.com/)
+[See all the examples live here](http://googlemap-examples.herokuapp.com/)
 
 ## Installation
 1. Place the helper into **app/View/Helper/GoogleMapHelper.php**
