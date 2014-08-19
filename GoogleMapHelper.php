@@ -36,7 +36,7 @@
 
 class GoogleMapHelper extends AppHelper {
 
-  private static $version = '0.1.0';
+  private static $version = '0.1.1';
 
   public static function getVersion(){
     return self::$version;
