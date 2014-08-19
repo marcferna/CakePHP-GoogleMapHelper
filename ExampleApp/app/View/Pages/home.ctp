@@ -88,6 +88,13 @@
     'action' => 'display',
     'directions_with_options'
 )); ?>
+<br/>
+<?php
+  echo $this->Html->link("Directions with lat & long", array(
+    'controller' => 'pages',
+    'action' => 'display',
+    'directions_with_latlong'
+)); ?>
 
 <br/><br/>
 <h3>Polylines Examples</h3>
