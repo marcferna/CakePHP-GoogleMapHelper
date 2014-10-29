@@ -248,6 +248,7 @@ class GoogleMapHelper extends AppHelper {
                 draggable: draggableMarker,
                 title:title
             });
+        updateCoordinatesDisplayed(id, position.lat(), position.lng());
            if(content != '' && showInfoWindow){
              var infowindow = new google.maps.InfoWindow({
                   content: content
@@ -256,7 +257,23 @@ class GoogleMapHelper extends AppHelper {
             infowindow.open(map,markers[index]);
               });
             }
+            if (draggableMarker) {
+              google.maps.event.addListener(markers[index], 'dragend', function(event) {
+                updateCoordinatesDisplayed(id, event.latLng.lat(), event.latLng.lng());
+              });
+            }
          }";
+         $map .= "
+          // An input with an id of 'latitude_<id>' and 'longitude_<id>' will be set, only if it exist
+          function updateCoordinatesDisplayed(markerId, latitude, longitude) {
+            if (document.getElementById('latitude_' + markerId)) {
+              document.getElementById('latitude_' + markerId).value = latitude;
+            }
+            if (document.getElementById('longitude_' + markerId)) {
+              document.getElementById('longitude_' + markerId).value = longitude;
+            }
+          }
+         ";
 
     $map .= "</script>";
     return $map;
