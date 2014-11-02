@@ -72,6 +72,13 @@
     'action' => 'display',
     'marker_with_options'
 )); ?>
+<br/>
+<?php
+  echo $this->Html->link("Draggable marker", array(
+    'controller' => 'pages',
+    'action' => 'display',
+    'draggable_marker'
+)); ?>
 
 <br/><br/>
 <h3>Directions Examples</h3>
