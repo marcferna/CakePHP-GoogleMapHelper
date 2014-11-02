@@ -103,6 +103,8 @@ class GoogleMapHelper extends AppHelper {
   var $defaultStrokeOpacity = 1.0;
   // Line Weight in pixels
   var $defaultStrokeWeight  = 2;
+  // Indicate if marker is draggable
+  var $defaultDraggableMarker  = false;
 
   /*
   * Method map
@@ -134,6 +136,7 @@ class GoogleMapHelper extends AppHelper {
     if (!isset($markerTitle))   $markerTitle  = $this->defaultMarkerTitle;
     if (!isset($infoWindow))    $infoWindow   = $this->defaultInfoWindow;
     if (!isset($windowText))    $windowText   = $this->defaultWindowText;
+    if (!isset($draggableMarker))   $draggableMarker = $this->defaultDraggableMarker;
 
     $map = "<div id='$id' style='width:$width; height:$height; $style'></div>";
     $map .="
@@ -142,7 +145,7 @@ class GoogleMapHelper extends AppHelper {
         var markersIds = new Array();
         var geocoder = new google.maps.Geocoder();
 
-        function geocodeAddress(address, action, map,markerId, markerTitle, markerIcon, markerShadow, windowText, showInfoWindow) {
+        function geocodeAddress(address, action, map,markerId, markerTitle, markerIcon, markerShadow, windowText, showInfoWindow, draggableMarker) {
             geocoder.geocode( { 'address': address}, function(results, status) {
               if (status == google.maps.GeocoderStatus.OK) {
                 if(action =='setCenter'){
@@ -150,7 +153,7 @@ class GoogleMapHelper extends AppHelper {
                 }
                 if(action =='setMarker'){
                   //return results[0].geometry.location;
-                  setMarker(map,markerId,results[0].geometry.location,markerTitle, markerIcon, markerShadow,windowText, showInfoWindow);
+                  setMarker(map,markerId,results[0].geometry.location,markerTitle, markerIcon, markerShadow,windowText, showInfoWindow, draggableMarker);
                 }
                 if(action =='addPolyline'){
                   return results[0].geometry.location;
@@ -181,7 +184,7 @@ class GoogleMapHelper extends AppHelper {
     else {
       $map .= "{$id}.setCenter(position);";
       if (!preg_match('/^https?:\/\//', $markerIcon)) $markerIcon = $this->webroot . IMAGES_URL . '/' . $markerIcon;
-      if($marker) $map .= "setMarker({$id},'center',position,'{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false').");";
+      if($marker) $map .= "setMarker({$id},'center',position,'{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false') . "," . ($draggableMarker? 'true' : 'false') .");";
     }
     $map .="
       }
@@ -197,7 +200,7 @@ class GoogleMapHelper extends AppHelper {
                   initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
                   {$id}.setCenter(initialLocation);";
                   if (!preg_match('/^https?:\/\//', $markerIcon)) $markerIcon = $this->webroot . IMAGES_URL . '/' . $markerIcon;
-            if($marker) $map .= "setMarker({$id},'center',initialLocation,'{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false').");";
+            if($marker) $map .= "setMarker({$id},'center',initialLocation,'{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false') . "," . ($draggableMarker? 'true' : 'false') .");";
 
                 $map .= "}, function() {
                   handleNoGeolocation(browserSupportFlag);
@@ -209,7 +212,7 @@ class GoogleMapHelper extends AppHelper {
           geo.getCurrentPosition(function(position) {
             initialLocation = new google.maps.LatLng(position.latitude,position.longitude);
             {$id}.setCenter(initialLocation);";
-              if($marker) $map .= "setMarker({$id},'center',initialLocation,'{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false').");";
+              if($marker) $map .= "setMarker({$id},'center',initialLocation,'{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false') . "," . ($draggableMarker? 'true' : 'false') .");";
 
                 $map .= "}, function() {
                   handleNoGeolocation(browserSupportFlag);
@@ -234,7 +237,7 @@ class GoogleMapHelper extends AppHelper {
         }";
 
         $map .= "
-      function setMarker(map, id, position, title, icon, shadow, content, showInfoWindow){
+      function setMarker(map, id, position, title, icon, shadow, content, showInfoWindow, draggableMarker){
         var index = markers.length;
         markersIds[markersIds.length] = id;
         markers[index] = new google.maps.Marker({
@@ -242,8 +245,10 @@ class GoogleMapHelper extends AppHelper {
                 map: map,
                 icon: icon,
                 shadow: shadow,
+                draggable: draggableMarker,
                 title:title
             });
+        updateCoordinatesDisplayed(id, position.lat(), position.lng());
            if(content != '' && showInfoWindow){
              var infowindow = new google.maps.InfoWindow({
                   content: content
@@ -252,7 +257,23 @@ class GoogleMapHelper extends AppHelper {
             infowindow.open(map,markers[index]);
               });
             }
+            if (draggableMarker) {
+              google.maps.event.addListener(markers[index], 'dragend', function(event) {
+                updateCoordinatesDisplayed(id, event.latLng.lat(), event.latLng.lng());
+              });
+            }
          }";
+         $map .= "
+          // An input with an id of 'latitude_<id>' and 'longitude_<id>' will be set, only if it exist
+          function updateCoordinatesDisplayed(markerId, latitude, longitude) {
+            if (document.getElementById('latitude_' + markerId)) {
+              document.getElementById('latitude_' + markerId).value = latitude;
+            }
+            if (document.getElementById('longitude_' + markerId)) {
+              document.getElementById('longitude_' + markerId).value = longitude;
+            }
+          }
+         ";
 
     $map .= "</script>";
     return $map;
@@ -293,16 +314,17 @@ class GoogleMapHelper extends AppHelper {
     if( !isset($markerTitle) )   $markerTitle = $this->defaultmarkerTitleM;
     if( !isset($markerIcon) )   $markerIcon = $this->defaultmarkerIconM;
     if( !isset($markerShadow) )   $markerShadow = $this->defaultmarkerShadowM;
+    if( !isset($draggableMarker) )   $draggableMarker = $this->defaultDraggableMarker;
     $marker = "<script>";
 
     if(!$geolocation){
       if (!preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $latitude) || !preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $longitude)) return null;
       if (!preg_match('/^https?:\/\//', $markerIcon)) $markerIcon = $this->webroot . IMAGES_URL . '/' . $markerIcon;
-      $marker .= "setMarker({$map_id},'{$id}',new google.maps.LatLng($latitude, $longitude),'{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false').")";
+      $marker .= "setMarker({$map_id},'{$id}',new google.maps.LatLng($latitude, $longitude),'{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false'). "," . ($draggableMarker? 'true' : 'false') .")";
     }else{
       if( empty($position) ) return null;
       if (!preg_match('/^https?:\/\//', $markerIcon)) $markerIcon = $this->webroot . IMAGES_URL . '/' . $markerIcon;
-      $marker .= "geocodeAddress('{$position}', 'setMarker', {$map_id},'{$id}','{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false').")";
+      $marker .= "geocodeAddress('{$position}', 'setMarker', {$map_id},'{$id}','{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false'). "," . ($draggableMarker? 'true' : 'false') .")";
     }
 
     $marker .= "</script>";

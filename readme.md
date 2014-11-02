@@ -47,6 +47,7 @@ Below are the options available to set to your map:
 * **markerShadow:** Default icon' shadow of the marker of your position
 * **infoWindow:** Boolean to show an information window when you click your position marker or not
 * **windowText:** Default text inside your position marker´s information window
+* **draggableMarker:** Indicator if marker will be draggable
 
 In order modify any of the default options shown above you need to create your map passing the array as follows:
 ```php
@@ -69,7 +70,8 @@ In order modify any of the default options shown above you need to create your m
     'markerIcon' => 'http://google-maps-icons.googlecode.com/files/home.png',
     'markerShadow' => 'http://google-maps-icons.googlecode.com/files/shadow.png',
     'infoWindow' => true,
-    'windowText' => 'My Position'
+    'windowText' => 'My Position',
+    'draggableMarker' => false
   );
 ?>
 
@@ -103,6 +105,7 @@ There are some marker options available to customize the marker popup info windo
 * **markerTitle:** Marker title (HTML title tag)
 * **markerIcon:** Marker icon
 * **markerShadow:** Marker icon shadow
+* **draggableMarker:** Indicator if marker will be draggable
 
 In order modify any of the default options shown above you need to create your marker passing the array as follows:
 ```php
@@ -115,11 +118,20 @@ In order modify any of the default options shown above you need to create your m
     'markerTitle' => 'Title',
     'markerIcon' => 'http://labs.google.com/ridefinder/images/mm_20_purple.png',
     'markerShadow' => 'http://labs.google.com/ridefinder/images/mm_20_purpleshadow.png',
+    'draggableMarker' => true
   );
 ?>
 
 <?= $this->GoogleMap->addMarker("map_canvas", 1, "1 Infinite Loop, Cupertino, California", $marker_options); ?>
 
+```
+
+### Draggable Marker
+To access the draggable marker's coordinates include an element in the html with the id of the marker.
+If a draggable marker with id of **1** is added, the coordinates can be accessed like:
+```html
+<input type="text" id="latitude_1" />
+<input type="text" id="longitude_1" />
 ```
 
 ## Directions
