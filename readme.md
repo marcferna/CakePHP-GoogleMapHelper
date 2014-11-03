@@ -204,3 +204,44 @@ In order modify any of the default options shown above you need to create your p
 <?= $this->GoogleMap->addPolyline("map_canvas", "polyline", array("start" => array("latitude" => 37.772323 ,"longitude" => -122.214897), "end" => array("latitude" => 21.291982 , "longitude" => -157.821856)), $options); ?>
 
 ```
+
+## Circles
+To draw a circle around a point use:
+```php
+<?= $this->GoogleMap->addCircle($map_id, $id, $center, $radius=100); ?>
+```
+Where:
+* **$map_id** is the map canvas id ('map_canvas' by default)
+* **$id** is the unique identifiyer for that circle
+* **$center** array with the center latitude and longitude coordinates (geolocation not suppoerted yet)
+* **$radius** specifies the radius of the circle, in meters. Defaults to 100 meters
+
+**Example:**
+```php
+<?= $this->GoogleMap->addCircle("map_canvas", "circle1", array('latitude' => 40.70894620592961, 'longitude' => -73.93882513046293)); ?>
+```
+
+### Circle Options
+There are some drawing options available to customize:
+* **strokeColor:** Specifies a hexadecimal HTML color of the format "#FFFFFF". The Circle class does not support named colors.
+* **strokeOpacity:** Specifies a numerical fractional value between 0.0 and 1.0.
+* **strokeWeight:** Specifies the weight of the line's stroke in pixels.
+* **fillColor:** Specifies a hexadecimal HTML color of the format "#FFFFFF". The Circle class does not support named colors.
+* **fillOpacity:** Specifies a numerical fractional value between 0.0 and 1.0.
+
+In order modify any of the default options shown above you need to create your circle passing the array as follows:
+```php
+
+<?
+  // Override any of the following default options to customize your circle
+  $options = array(
+    "strokeColor" => "#FFFFFF",
+    "strokeOpacity" => 1,
+    "strokeWeight" => 5,
+    "fillColor" => "#E2252D",
+    "fillOpacity" => 0.3
+  );
+?>
+<?= $this->GoogleMap->addCircle("map_canvas", "circle1", array('latitude' => 40.70894620592961, 'longitude' => -73.93882513046293), 1000, $options); ?>
+
+```

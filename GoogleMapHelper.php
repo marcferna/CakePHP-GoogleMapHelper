@@ -36,7 +36,7 @@
 
 class GoogleMapHelper extends AppHelper {
 
-  private static $version = '0.1.1';
+  private static $version = '0.1.2';
 
   public static function getVersion(){
     return self::$version;
@@ -89,6 +89,8 @@ class GoogleMapHelper extends AppHelper {
   var $defaultmarkerIconM   = "http://maps.google.com/mapfiles/marker.png";
   // Default shadow for the marker icon
   var $defaultmarkerShadowM = "http://maps.google.com/mapfiles/shadow50.png";
+    // Indicate if marker is draggable
+  var $defaultDraggableMarker  = false;
 
   //DEFAULT DIRECTIONS OPTIONS (method getDirections())
   // Default travel mode (DRIVING, BICYCLING, TRANSIT, WALKING)
@@ -103,8 +105,10 @@ class GoogleMapHelper extends AppHelper {
   var $defaultStrokeOpacity = 1.0;
   // Line Weight in pixels
   var $defaultStrokeWeight  = 2;
-  // Indicate if marker is draggable
-  var $defaultDraggableMarker  = false;
+
+  //DEFAULT CIRCLE OPTIONS (method addCircle())
+  var $defaultFillColor = "";
+  var $defaultFillOpacity = 0;
 
   /*
   * Method map
@@ -122,21 +126,22 @@ class GoogleMapHelper extends AppHelper {
     if ($options != null) {
       extract($options);
     }
-    if (!isset($id))            $id           = $this->defaultId;
-    if (!isset($width))         $width        = $this->defaultWidth;
-    if (!isset($height))        $height       = $this->defaultHeight;
-    if (!isset($style))         $style        = $this->defaultStyle;
-    if (!isset($zoom))          $zoom         = $this->defaultZoom;
-    if (!isset($type))          $type         = $this->defaultType;
-    if (!isset($custom))        $custom       = $this->defaultCustom;
-    if (!isset($localize))      $localize     = $this->defaultLocalize;
-    if (!isset($marker))        $marker       = $this->defaultMarker;
-    if (!isset($markerIcon))    $markerIcon   = $this->defaultMarkerIcon;
-    if (!isset($markerShadow))  $markerShadow = $this->defaultMarkerShadow;
-    if (!isset($markerTitle))   $markerTitle  = $this->defaultMarkerTitle;
-    if (!isset($infoWindow))    $infoWindow   = $this->defaultInfoWindow;
-    if (!isset($windowText))    $windowText   = $this->defaultWindowText;
-    if (!isset($draggableMarker))   $draggableMarker = $this->defaultDraggableMarker;
+    if (!isset($id))               $id           = $this->defaultId;
+    if (!isset($width))            $width        = $this->defaultWidth;
+    if (!isset($height))           $height       = $this->defaultHeight;
+    if (!isset($style))            $style        = $this->defaultStyle;
+    if (!isset($zoom))             $zoom         = $this->defaultZoom;
+    if (!isset($type))             $type         = $this->defaultType;
+    if (!isset($custom))           $custom       = $this->defaultCustom;
+    if (!isset($localize))         $localize     = $this->defaultLocalize;
+    if (!isset($marker))           $marker       = $this->defaultMarker;
+    if (!isset($markerIcon))       $markerIcon   = $this->defaultMarkerIcon;
+    if (!isset($markerShadow))     $markerShadow = $this->defaultMarkerShadow;
+    if (!isset($markerTitle))      $markerTitle  = $this->defaultMarkerTitle;
+    if (!isset($infoWindow))       $infoWindow   = $this->defaultInfoWindow;
+    if (!isset($windowText))       $windowText   = $this->defaultWindowText;
+    if (!isset($draggableMarker))  $draggableMarker = $this->defaultDraggableMarker;
+
 
     $map = "<div id='$id' style='width:$width; height:$height; $style'></div>";
     $map .="
@@ -437,15 +442,7 @@ class GoogleMapHelper extends AppHelper {
       $longitude_end = $position["end"]["longitude"];
     }
 
-    if( $options != null )
-    {
-      extract($options);
-    }
-    if( !isset($travelMode) )      $travelMode = $this->defaultTravelMode;
-    if( !isset($directionsDiv) )  $directionsDiv = $this->defaultDirectionsDiv;
-
     $polyline = "<script>";
-
 
     if (!preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $latitude_start) || !preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $longitude_start)) return null;
     $polyline .= "var start = new google.maps.LatLng({$latitude_start}, {$longitude_start}); ";
@@ -472,6 +469,65 @@ class GoogleMapHelper extends AppHelper {
     return $polyline;
   }
 
+  /*
+  * Method addCircle
+  *
+  * This method adds a circle arround a center point
+  *
+  *
+  * @author Marc Fernandez <marc.fernandezg (at) gmail (dot) com>
+  * @param $map_id - Id that you used to create the map (default 'map_canvas')
+  * @param $id - Unique identifier for the directions
+  * @param mixed $position - array with start and end latitudes and longitudes
+  * @param array $options - options array
+  * @return string - will return all the javascript script to add the directions to the map
+  *
+  */
+  function addCircle($map_id, $id, $center, $radius = 100, $options = array()){
+    if($id == null || $map_id == null || $center == null) return null;
 
+    if( $options != null )
+    {
+      extract($options);
+    }
+    if( !isset($strokeColor) )    $strokeColor = $this->defaultStrokeColor;
+    if( !isset($strokeOpacity) )  $strokeOpacity = $this->defaultStrokeOpacity;
+    if( !isset($strokeWeight) )    $strokeWeight = $this->defaultStrokeWeight;
+    if( !isset($fillColor) )    $fillColor = $this->defaultFillColor;
+    if( !isset($fillOpacity) )    $fillOpacity = $this->defaultFillOpacity;
+
+    // Check if position is array and has the two necessary elements
+    if( is_array($center) ){
+      if( !isset($center["latitude"]) || !isset($center["longitude"]) )
+        return null;
+      $latitude_center = $center["latitude"];
+      $longitude_center = $center["longitude"];
+    } else {
+      return "Error: Center needs latitude and longiture";
+      return null;
+    }
+
+    $circle = "<script>";
+
+
+    if (!preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $latitude_center) || !preg_match("/[-+]?\b[0-9]*\.?[0-9]+\b/", $longitude_center)) return null;
+    $circle .= "var center = new google.maps.LatLng({$latitude_center}, {$longitude_center}); ";
+
+    $circle .= "
+        var {$id}Circle = new google.maps.Circle({
+          strokeColor: '{$strokeColor}',
+          strokeOpacity: {$strokeOpacity},
+          strokeWeight: {$strokeWeight},
+          fillColor: '{$fillColor}',
+          fillOpacity: {$fillOpacity},
+          center: center,
+          radius: {$radius}
+        });
+        {$id}Circle.setMap({$map_id});
+
+      </script>
+      ";
+    return $circle;
+  }
 }
 ?>

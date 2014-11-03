@@ -118,3 +118,19 @@
     'action' => 'display',
     'polyline_with_options'
 )); ?>
+
+<br/><br/>
+<h3>Circle Examples</h3>
+<?php
+  echo $this->Html->link("Default circle", array(
+    'controller' => 'pages',
+    'action' => 'display',
+    'default_circle'
+)); ?>
+<br/>
+<?php
+  echo $this->Html->link("Circle with options", array(
+    'controller' => 'pages',
+    'action' => 'display',
+    'circle_with_options'
+)); ?>
