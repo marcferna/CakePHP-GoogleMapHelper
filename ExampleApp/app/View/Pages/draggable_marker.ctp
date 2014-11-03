@@ -12,7 +12,7 @@
   <input type="text" id="longitude_2" disabled="true" />
 </div>
 <div style="float:left;">
-  <?= $this->GoogleMap->map(['localize' => false, 'type' => 'ROADMAP', 'zoom' => 14, 'marker' => false, 'draggableMarker' => false]); ?>
+  <?= $this->GoogleMap->map(array('localize' => false, 'type' => 'ROADMAP', 'zoom' => 14, 'marker' => false, 'draggableMarker' => false)); ?>
   <?= $this->GoogleMap->addMarker('map_canvas', 1, array('latitude' => 40.70894620592961, 'longitude' => -73.93882513046293), array('draggableMarker' => true, 'windowText' => 'Pin 1')); ?>
   <?= $this->GoogleMap->addMarker('map_canvas', 2, '63 Flushing Ave #300, New York, NY 11205, United States', array('draggableMarker' => true, 'windowText' => 'Pin 2')); ?>
 </div>
