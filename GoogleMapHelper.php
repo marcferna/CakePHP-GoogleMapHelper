@@ -336,7 +336,7 @@ class GoogleMapHelper extends AppHelper {
       $marker .= "geocodeAddress('{$position}', 'setMarker', {$map_id},'{$id}','{$markerTitle}','{$markerIcon}','{$markerShadow}','{$windowText}', ".($infoWindow? 'true' : 'false'). "," . ($draggableMarker? 'true' : 'false') .")";
     }
 
-    $marker .= "</script>";
+    $marker .= "</script>\n";
     return $marker;
   }
 
