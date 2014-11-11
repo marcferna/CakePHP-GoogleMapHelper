@@ -337,6 +337,29 @@ class GoogleMapHelper extends AppHelper {
   }
 
   /*
+  * Method clusterMarkers
+  *
+  * This method collects all markers into clusters and utilizes the MarkerCluster utility
+  *
+  *
+  * @author Corie Slate <corie.slate (at) gmail (dot) com>
+  * @param $map_id - Id that you used to create the map (default 'map_canvas')
+  * @param array $options - options array
+  * @return string - will return all the javascript script to add the clusterer to the map
+  *
+  */
+  function clusterMarkers($map_id, $options = array()){
+    if($map_id == null) return null;
+    
+    $cluster = "<script>";
+
+    $cluster .= "var markerCluster = new MarkerClusterer({$map_id}, markers);";
+
+    $cluster .= "</script>";
+    return $cluster;
+  }
+  
+  /*
   * Method getDirections
   *
   * This method gets the direction between two addresses or markers
