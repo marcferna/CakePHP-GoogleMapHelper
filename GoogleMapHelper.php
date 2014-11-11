@@ -279,6 +279,25 @@ class GoogleMapHelper extends AppHelper {
             }
           }
          ";
+         $map .= "
+          // remove a marker from map
+      function removeMarker(id){
+	   var index = markersIds.indexOf(String(id));
+	   if (index > -1) {
+	   	markers[index].setMap(null);
+	   	return true;
+	   }
+	   return false;
+	    }
+	    // add a marker back to map
+	    function addMarker(id, map){
+	   var index = markersIds.indexOf(String(id));
+	   if (index > -1) {
+	   	markers[index].setMap(map);
+	   	return true;
+	   }
+	   return false;
+	    }";
 
     $map .= "</script>";
     return $map;
