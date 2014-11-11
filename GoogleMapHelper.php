@@ -320,6 +320,10 @@ class GoogleMapHelper extends AppHelper {
     if( !isset($markerIcon) )   $markerIcon = $this->defaultmarkerIconM;
     if( !isset($markerShadow) )   $markerShadow = $this->defaultmarkerShadowM;
     if( !isset($draggableMarker) )   $draggableMarker = $this->defaultDraggableMarker;
+    
+    $markerTitle = addslashes($markerTitle);
+    $windowText = addslashes($windowText);
+    
     $marker = "<script>";
 
     if(!$geolocation){
