@@ -86,6 +86,13 @@
     'action' => 'display',
     'toggle_markers'
 )); ?>
+<br/>
+<?php
+  echo $this->Html->link("Cluster markers", array(
+    'controller' => 'pages',
+    'action' => 'display',
+    'cluster_markers'
+)); ?>
 
 <br/><br/>
 <h3>Directions Examples</h3>
