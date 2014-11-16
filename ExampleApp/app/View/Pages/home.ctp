@@ -79,6 +79,13 @@
     'action' => 'display',
     'draggable_marker'
 )); ?>
+<br/>
+<?php
+  echo $this->Html->link("Toggle markers", array(
+    'controller' => 'pages',
+    'action' => 'display',
+    'toggle_markers'
+)); ?>
 
 <br/><br/>
 <h3>Directions Examples</h3>
