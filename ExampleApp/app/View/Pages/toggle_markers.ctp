@@ -18,8 +18,8 @@
 
 <div style="float:left;">
   <script>var red = blue = true;</script>
-	<button onclick="if(red){removeMarker(2, temp_canvas);removeMarker(3, temp_canvas);red=false;}else{addMarker(2, temp_canvas);addMarker(3, temp_canvas);red=true;}">Toggle Red Markers</button> 
-	<button onclick="if(blue){removeMarker(4, temp_canvas);removeMarker(5, temp_canvas);blue=false;}else{addMarker(4, temp_canvas);addMarker(5, temp_canvas);blue=true;}">Toggle Blue Markers</button>
+	<button onclick="if(red){removeMarker(2, map_canvas);removeMarker(3, map_canvas);red=false;}else{addMarker(2, map_canvas);addMarker(3, map_canvas);red=true;}">Toggle Red Markers</button>
+	<button onclick="if(blue){removeMarker(4, map_canvas);removeMarker(5, map_canvas);blue=false;}else{addMarker(4, map_canvas);addMarker(5, map_canvas);blue=true;}">Toggle Blue Markers</button>
   <?= $this->GoogleMap->map($map_options); ?>
 </div>
 <?=
@@ -27,8 +27,8 @@
     'showWindow' => true,
     'windowText' => 'Marker',
     'markerTitle' => 'Title',
-    'markerIcon' => 'http://labs.google.com/ridefinder/images/mm_20_purple.png',
-    'markerShadow' => 'http://labs.google.com/ridefinder/images/mm_20_purpleshadow.png'
+    'markerIcon' => 'http://labs.google.com/ridefinder/images/mm_20_red.png',
+    'markerShadow' => 'http://labs.google.com/ridefinder/images/mm_20_redshadow.png'
   ));
 ?>
 <?=
@@ -36,8 +36,8 @@
     'showWindow' => true,
     'windowText' => 'Marker',
     'markerTitle' => 'Title',
-    'markerIcon' => 'http://labs.google.com/ridefinder/images/mm_20_purple.png',
-    'markerShadow' => 'http://labs.google.com/ridefinder/images/mm_20_purpleshadow.png'
+    'markerIcon' => 'http://labs.google.com/ridefinder/images/mm_20_red.png',
+    'markerShadow' => 'http://labs.google.com/ridefinder/images/mm_20_redshadow.png'
   ));
 ?>
 <?=
@@ -45,8 +45,8 @@
     'showWindow' => true,
     'windowText' => 'Marker',
     'markerTitle' => 'Title',
-    'markerIcon' => 'http://labs.google.com/ridefinder/images/mm_20_purple.png',
-    'markerShadow' => 'http://labs.google.com/ridefinder/images/mm_20_purpleshadow.png'
+    'markerIcon' => 'http://labs.google.com/ridefinder/images/mm_20_blue.png',
+    'markerShadow' => 'http://labs.google.com/ridefinder/images/mm_20_blueshadow.png'
   ));
 ?>
 <?=
@@ -54,8 +54,8 @@
     'showWindow' => true,
     'windowText' => 'Marker',
     'markerTitle' => 'Title',
-    'markerIcon' => 'http://labs.google.com/ridefinder/images/mm_20_purple.png',
-    'markerShadow' => 'http://labs.google.com/ridefinder/images/mm_20_purpleshadow.png'
+    'markerIcon' => 'http://labs.google.com/ridefinder/images/mm_20_blue.png',
+    'markerShadow' => 'http://labs.google.com/ridefinder/images/mm_20_blueshadow.png'
   ));
 ?>
 
@@ -78,45 +78,45 @@
     ?>
     // add marker toggle buttons
     <script>var red = blue = true;</script>
-	  <button onclick="if(red){removeMarker(2, temp_canvas);removeMarker(3, temp_canvas);red=false;}else{addMarker(2, temp_canvas);addMarker(3, temp_canvas);red=true;}">Toggle Red Markers</button> 
-	  <button onclick="if(blue){removeMarker(4, temp_canvas);removeMarker(5, temp_canvas);blue=false;}else{addMarker(4, temp_canvas);addMarker(5, temp_canvas);blue=true;}">Toggle Blue Markers</button>
+	  <button onclick="if(red){removeMarker(2, map_canvas);removeMarker(3, map_canvas);red=false;}else{addMarker(2, map_canvas);addMarker(3, map_canvas);red=true;}">Toggle Red Markers</button>
+	  <button onclick="if(blue){removeMarker(4, map_canvas);removeMarker(5, map_canvas);blue=false;}else{addMarker(4, map_canvas);addMarker(5, map_canvas);blue=true;}">Toggle Blue Markers</button>
     // print the default map
     <?= $this->GoogleMap->map($map_options); ?>
     // add the markers with options
     <?=
       $this->GoogleMap->addMarker("map_canvas", 2, "Las Angeles, CA", array(
-        'showWindow' => true,
-        'windowText' => 'Marker',
-        'markerTitle' => 'Title',
-        'markerIcon' => 'http://labs.google.com/ridefinder/images/mm_20_purple.png',
-        'markerShadow' => 'http://labs.google.com/ridefinder/images/mm_20_purpleshadow.png'
+        "showWindow" => true,
+        "windowText" => "Marker",
+        "markerTitle" => "Title",
+        "markerIcon" => "http://labs.google.com/ridefinder/images/mm_20_red.png",
+        "markerShadow" => "http://labs.google.com/ridefinder/images/mm_20_redshadow.png"
       ));
     ?>
     <?=
       $this->GoogleMap->addMarker("map_canvas", 3, "Chicago, IL", array(
-        'showWindow' => true,
-        'windowText' => 'Marker',
-        'markerTitle' => 'Title',
-        'markerIcon' => 'http://labs.google.com/ridefinder/images/mm_20_purple.png',
-        'markerShadow' => 'http://labs.google.com/ridefinder/images/mm_20_purpleshadow.png'
+        "showWindow" => true,
+        "windowText" => "Marker",
+        "markerTitle" => "Title",
+        "markerIcon" => "http://labs.google.com/ridefinder/images/mm_20_red.png",
+        "markerShadow" => "http://labs.google.com/ridefinder/images/mm_20_redshadow.png"
       ));
     ?>
     <?=
       $this->GoogleMap->addMarker("map_canvas", 4, "Pumpkin Town, SC", array(
-        'showWindow' => true,
-        'windowText' => 'Marker',
-        'markerTitle' => 'Title',
-        'markerIcon' => 'http://labs.google.com/ridefinder/images/mm_20_purple.png',
-        'markerShadow' => 'http://labs.google.com/ridefinder/images/mm_20_purpleshadow.png'
+        "showWindow" => true,
+        "windowText" => "Marker",
+        "markerTitle" => "Title",
+        "markerIcon" => "http://labs.google.com/ridefinder/images/mm_20_red.png",
+        "markerShadow" => "http://labs.google.com/ridefinder/images/mm_20_blueshadow.png"
       ));
     ?>
     <?=
       $this->GoogleMap->addMarker("map_canvas", 5, "Melrose, NM", array(
-        'showWindow' => true,
-        'windowText' => 'Marker',
-        'markerTitle' => 'Title',
-        'markerIcon' => 'http://labs.google.com/ridefinder/images/mm_20_purple.png',
-        'markerShadow' => 'http://labs.google.com/ridefinder/images/mm_20_purpleshadow.png'
+        "showWindow" => true,
+        "windowText" => "Marker",
+        "markerTitle" => "Title",
+        "markerIcon" => "http://labs.google.com/ridefinder/images/mm_20_blue.png",
+        "markerShadow" => "http://labs.google.com/ridefinder/images/mm_20_blueshadow.png"
       ));
     ?>
 '   ;

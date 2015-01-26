@@ -253,7 +253,6 @@ class GoogleMapHelper extends AppHelper {
                 draggable: draggableMarker,
                 title:title
             });
-        updateCoordinatesDisplayed(id, position.lat(), position.lng());
            if(content != '' && showInfoWindow){
              var infowindow = new google.maps.InfoWindow({
                   content: content
@@ -339,10 +338,10 @@ class GoogleMapHelper extends AppHelper {
     if( !isset($markerIcon) )   $markerIcon = $this->defaultmarkerIconM;
     if( !isset($markerShadow) )   $markerShadow = $this->defaultmarkerShadowM;
     if( !isset($draggableMarker) )   $draggableMarker = $this->defaultDraggableMarker;
-    
+
     $markerTitle = addslashes($markerTitle);
     $windowText = addslashes($windowText);
-    
+
     $marker = "<script>";
 
     if(!$geolocation){
@@ -372,7 +371,7 @@ class GoogleMapHelper extends AppHelper {
   */
   function clusterMarkers($map_id){
     if($map_id == null) return null;
-    
+
     $cluster = "<script>";
 
     $cluster .= "var markerCluster = new MarkerClusterer({$map_id}, markers);";
@@ -380,7 +379,7 @@ class GoogleMapHelper extends AppHelper {
     $cluster .= "</script>";
     return $cluster;
   }
-  
+
   /*
   * Method getDirections
   *
