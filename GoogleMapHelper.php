@@ -255,22 +255,14 @@ class GoogleMapHelper extends AppHelper {
             });
            if(content != '' && showInfoWindow){
              var infowindow = new google.maps.InfoWindow({
-                  content: content,
-                  
-
+                  content: content
               });
             google.maps.event.addListener(markers[index], 'click', function() {
-              // fix to show infowindow in the correct location for many maps in a single place 
-              //old code => infowindow.open(map,markers[index]);
-
               for(w=0;w<markers.length;w++){
-               
                 infowindow.setContent(content);
                 infowindow.open(map,this)
               }
-
               });
-
             }
             if (draggableMarker) {
               google.maps.event.addListener(markers[index], 'dragend', function(event) {
