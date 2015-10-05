@@ -257,8 +257,11 @@ class GoogleMapHelper extends AppHelper {
              var infowindow = new google.maps.InfoWindow({
                   content: content
               });
-             google.maps.event.addListener(markers[index], 'click', function() {
-            infowindow.open(map,markers[index]);
+            google.maps.event.addListener(markers[index], 'click', function() {
+              for(w=0;w<markers.length;w++){
+                infowindow.setContent(content);
+                infowindow.open(map,this)
+              }
               });
             }
             if (draggableMarker) {
