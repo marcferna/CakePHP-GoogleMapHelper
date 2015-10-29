@@ -34,9 +34,12 @@
 
 */
 
-class GoogleMapHelper extends AppHelper {
+namespace App\View\Helper;
+use Cake\View\Helper;
 
-  private static $version = '0.1.3';
+class GoogleMapHelper extends Helper {
+
+  private static $version = '0.2.0';
 
   public static function getVersion(){
     return self::$version;
